@@ -1,0 +1,529 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Guía para integrar IA a tus proyectos</title>
+<style>
+  :root{
+    --paper:#f4f7f4; --ink:#17231e; --panel:#ffffff; --line:#d7e1d9;
+    --muted:#51665c; --accent:#1c8a63; --accent-deep:#0d5d42; --signal:#a86114;
+    --signal-soft:#f6ede0; --accent-soft:#e7f2ec; --ok:#176c4e; --bad:#9d2d20;
+    --radius:12px; --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+    --sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{--paper:#0e1614; --ink:#e9efe9; --panel:#15211c; --line:#2b3b32;
+      --muted:#a5b7ad; --accent:#37b585; --accent-deep:#67d3a8; --signal:#f0b363;
+      --signal-soft:#2a2417; --accent-soft:#132b22; --ok:#66d1a5; --bad:#f08b7f;}
+  }
+  :root[data-theme="dark"]{--paper:#0e1614; --ink:#e9efe9; --panel:#15211c; --line:#2b3b32;
+    --muted:#a5b7ad; --accent:#37b585; --accent-deep:#67d3a8; --signal:#f0b363;
+    --signal-soft:#2a2417; --accent-soft:#132b22; --ok:#66d1a5; --bad:#f08b7f;}
+  :root[data-theme="light"]{--paper:#f4f7f4; --ink:#17231e; --panel:#ffffff; --line:#d7e1d9;
+    --muted:#51665c; --accent:#1c8a63; --accent-deep:#0d5d42; --signal:#a86114;
+    --signal-soft:#f6ede0; --accent-soft:#e7f2ec; --ok:#176c4e; --bad:#9d2d20;}
+
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0}
+  .wrap{background:var(--paper);color:var(--ink);font-family:var(--sans);line-height:1.62;
+    -webkit-font-smoothing:antialiased;min-height:100vh}
+  .col{max-width:820px;margin:0 auto;padding:0 22px}
+  h1,h2,h3,h4{text-wrap:balance;line-height:1.14;letter-spacing:0;margin:0}
+  a{color:var(--accent-deep);font-weight:650;text-underline-offset:3px}
+  a:hover{text-decoration-thickness:2px}
+  a:focus-visible,button:focus-visible,summary:focus-visible,input:focus-visible{outline:3px solid var(--signal);outline-offset:3px}
+  .dot{width:10px;height:10px;border-radius:50%;background:var(--accent);flex:none}
+
+  nav.toc{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--paper) 90%,transparent);
+    backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+  nav.toc .col{display:flex;gap:6px;overflow-x:auto;padding:9px 22px;scrollbar-width:none}
+  nav.toc a{font-size:.8rem;font-weight:700;color:var(--muted);text-decoration:none;white-space:nowrap;
+    padding:6px 11px;border-radius:8px}
+  nav.toc a:hover,nav.toc a:focus-visible{color:var(--ink);background:var(--accent-soft)}
+
+  header{padding:56px 0 40px;border-bottom:1px solid var(--line)}
+  .h-badge{display:inline-flex;align-items:center;gap:8px;font-size:.74rem;font-weight:700;
+    color:var(--accent-deep);background:var(--accent-soft);border:1px solid var(--line);padding:5px 12px;border-radius:999px}
+  header h1{font-size:clamp(2rem,6vw,3.1rem);font-weight:850;margin:18px 0 14px}
+  header p.lead{font-size:1.15rem;color:var(--muted);max-width:64ch;margin:0}
+
+  .paste,.checklist{margin:32px 0 8px;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+  .paste .top,.checklist .top{display:flex;align-items:center;gap:10px;padding:13px 18px;border-bottom:1px solid var(--line);background:var(--accent-soft)}
+  .paste .top strong,.checklist .top strong{font-size:.95rem}
+  .paste .top span,.checklist .top span{color:var(--muted);font-size:.85rem;margin-left:auto}
+  .paste pre{margin:0;padding:16px 18px;font-family:var(--mono);font-size:.85rem;line-height:1.55;white-space:pre-wrap;color:var(--ink)}
+  .paste .act{display:flex;gap:10px;padding:0 18px 16px;flex-wrap:wrap}
+  .checklist .items{display:grid;gap:0;padding:5px 0}
+  .check{display:flex;gap:10px;align-items:flex-start;padding:10px 18px;border-top:1px solid color-mix(in srgb,var(--line) 55%,transparent)}
+  .check:first-child{border-top:0}
+  .check input{width:18px;height:18px;margin-top:3px;accent-color:var(--accent)}
+  .check span{font-size:.94rem}
+  .check small{display:block;color:var(--muted);font-size:.8rem;margin-top:1px}
+
+  button{font-family:var(--sans);cursor:pointer;border-radius:10px;font-weight:700;border:1px solid transparent;transition:transform .06s,background .15s,border-color .15s}
+  button:active{transform:translateY(1px)}
+  .btn-go{background:var(--accent);color:#fff;border-color:var(--accent-deep);padding:11px 18px;font-size:.92rem}
+  .btn-go:hover{background:var(--accent-deep)}
+  .btn-ghost{background:transparent;color:var(--ink);border-color:var(--line);padding:11px 16px;font-size:.9rem}
+  .btn-ghost:hover{border-color:var(--accent)}
+  .copy{background:var(--panel);color:var(--accent-deep);border:1px solid var(--accent);padding:7px 13px;font-size:.8rem;white-space:nowrap}
+  .copy:hover{background:var(--accent-soft)}
+  .copy.done{background:var(--accent);color:#fff}
+
+  section{padding:42px 0;border-bottom:1px solid var(--line);scroll-margin-top:52px}
+  .step-h{display:flex;align-items:center;gap:14px;margin-bottom:6px}
+  .num{flex:none;width:34px;height:34px;border-radius:9px;background:var(--ink);color:var(--paper);display:grid;place-items:center;font-weight:850}
+  .num.opt{background:var(--accent-soft);color:var(--accent-deep);border:1px solid var(--accent)}
+  .step-h h2{font-size:1.5rem;font-weight:850}
+  .lead2{color:var(--muted);margin:.4rem 0 0}
+  .hint{font-size:.9rem;color:var(--muted)}
+  .callout,.verify,.trouble{margin-top:16px;padding:14px 16px;background:var(--signal-soft);border:1px solid var(--line);border-radius:10px;font-size:.92rem}
+  .callout b{color:var(--signal)}
+  .verify{background:var(--accent-soft)}
+  .verify b{color:var(--ok)}
+  .trouble{background:var(--panel)}
+  .trouble b{color:var(--bad)}
+  .links{display:flex;flex-wrap:wrap;gap:9px;margin:14px 0 2px}
+  .links a{display:inline-flex;align-items:center;min-height:34px;padding:6px 10px;border:1px solid var(--line);border-radius:8px;text-decoration:none;background:var(--panel);font-size:.86rem}
+  .links a:hover{border-color:var(--accent);background:var(--accent-soft)}
+
+  .cmd{margin-top:10px;background:var(--paper);border:1px solid var(--line);border-radius:10px;display:flex;align-items:center;gap:10px;padding:9px 10px 9px 13px}
+  .cmd code{font-family:var(--mono);font-size:.82rem;color:var(--ink);flex:1;overflow-x:auto;white-space:nowrap}
+  ol{padding-left:20px}ol li{margin:9px 0}
+  ol li b{color:var(--ink)}
+
+  .chips{display:flex;flex-wrap:wrap;gap:10px;margin:20px 0}
+  .chip{background:var(--panel);border:1px solid var(--line);color:var(--ink);padding:12px 16px;font-size:.94rem;font-weight:700;display:flex;align-items:center;gap:9px}
+  .chip:hover{border-color:var(--accent)}
+  .chip[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent);color:var(--accent-deep)}
+  .chip .ic{font-size:1.05rem}
+  .path{display:none;margin-top:8px;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:22px}
+  .path.on{display:block;animation:fade .25s}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.path.on{animation:none}button{transition:none}.toast{transition:none}}
+  .path h3{font-size:1.12rem;margin-bottom:2px}
+  .path .sub{color:var(--muted);font-size:.9rem;margin:2px 0 10px}
+  .tag{font-size:.7rem;font-weight:800;padding:3px 9px;border-radius:999px;margin-left:8px;vertical-align:middle}
+  .tag.free{background:var(--accent-soft);color:var(--accent-deep)}
+  .tag.local{background:var(--signal-soft);color:var(--signal)}
+  .tag.ga{background:var(--accent-soft);color:var(--accent-deep)}
+  .tag.beta{background:var(--signal-soft);color:var(--signal)}
+  .tag.demo{background:var(--panel);color:var(--muted);border:1px solid var(--line)}
+
+  .tools{display:grid;grid-template-columns:1fr;gap:14px;margin-top:20px}
+  @media(min-width:620px){.tools{grid-template-columns:1fr 1fr}}
+  .tool{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:18px;display:flex;flex-direction:column;gap:9px}
+  .tool .row{display:flex;align-items:center;gap:10px}
+  .tool h3{font-size:1.06rem;font-weight:850}
+  .tool .goal{color:var(--muted);font-size:.9rem;margin:0}
+  .tool .ord{margin-left:auto;color:var(--muted);font-weight:800;font-size:.78rem}
+  .tool.infra{border-style:dashed}
+
+  .flow{display:grid;gap:10px;margin-top:18px}
+  .flow .row{display:flex;gap:14px;align-items:flex-start;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+  .flow .role{flex:none;width:104px;font-weight:850;color:var(--accent-deep);font-size:.9rem}
+  .flow .who{color:var(--muted);font-size:.82rem;font-weight:400;display:block;margin-top:2px}
+  .flow .txt{font-size:.94rem}
+
+  details{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:2px 18px;margin:11px 0}
+  details summary{cursor:pointer;font-weight:700;padding:14px 0;list-style:none}
+  details summary::-webkit-details-marker{display:none}
+  details summary::before{content:"+ ";color:var(--accent);font-weight:850}
+  details[open] summary::before{content:"- "}
+  details p,details ol{color:var(--muted);margin:0 0 14px}
+  details .cmd code{color:var(--ink)}
+
+  footer{padding:38px 0 60px;color:var(--muted);font-size:.86rem;text-align:center}
+  .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:var(--paper);padding:11px 20px;border-radius:999px;font-size:.88rem;font-weight:700;opacity:0;pointer-events:none;transition:.25s;z-index:50}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  .theme{position:fixed;top:52px;right:16px;z-index:40;background:var(--panel);border:1px solid var(--line);color:var(--ink);width:38px;height:38px;border-radius:10px;font-size:1.05rem;display:grid;place-items:center}
+  @media(max-width:560px){
+    .col{padding:0 18px}
+    nav.toc .col{padding:9px 18px}
+    header{padding-top:48px}
+    .theme{top:50px;right:10px}
+    .flow .row{display:block}
+    .flow .role{width:auto;margin-bottom:4px}
+    .cmd{align-items:stretch}
+    .cmd code{white-space:pre-wrap;overflow-wrap:anywhere}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav class="toc" aria-label="Índice"><div class="col">
+    <a href="#s0">0 · Qué es esto</a>
+    <a href="#s1">1 · Prepara tu equipo</a>
+    <a href="#s2">2 · Instala tu IA</a>
+    <a href="#s3">3 · Conecta la suite</a>
+    <a href="#s4">4 · Cómo se trabaja</a>
+    <a href="#s5">5 · Herramientas</a>
+    <a href="#s6">6 · Dudas</a>
+  </div></nav>
+  <button class="theme" id="themeBtn" aria-label="Cambiar tema" title="Cambiar tema">◐</button>
+
+  <header>
+    <div class="col">
+      <span class="h-badge"><span class="dot"></span> Suite de Gobernanza IA · SolucionesPro</span>
+      <h1>Guía para integrar IA a tus proyectos</h1>
+      <p class="lead">De cero a trabajar con agentes de IA en tus proyectos: instalas un asistente, conectas las herramientas de la Suite, y aprendes a dirigir a los agentes para que hagan el trabajo con tu control. Sin experiencia previa.</p>
+      <div class="paste">
+        <div class="top"><span class="dot"></span><strong>Atajo: si ya tienes un chat de IA, pégale esto</strong><span>1 mensaje</span></div>
+        <pre id="masterPrompt">Eres mi guía de instalación. Ayúdame paso a paso, sin tecnicismos, a preparar mi equipo e instalar un asistente de IA (Claude Code, Codex, opencode u Ollama), y luego a conectar las herramientas de la Suite de Gobernanza IA. Detecta qué tengo, hazlo UN paso a la vez, confírmame cada paso, y empieza preguntándome en qué sistema estoy (Windows, Mac o Linux).</pre>
+        <div class="act">
+          <button class="btn-go" data-copy="#masterPrompt">Copiar y pegar en mi chat</button>
+          <button class="btn-ghost" id="startBtn">Empezar de cero ↓</button>
+        </div>
+      </div>
+      <div class="checklist" aria-labelledby="checkTitle">
+        <div class="top"><span class="dot"></span><strong id="checkTitle">Checklist opcional</strong><span>se guarda en este navegador</span></div>
+        <div class="items" id="checkItems">
+          <label class="check"><input type="checkbox" data-check="node"><span>Instalé Node.js y verifiqué <code>node --version</code>.<small>No hace falta para Ollama.</small></span></label>
+          <label class="check"><input type="checkbox" data-check="assistant"><span>Instalé al menos un asistente de IA y lo pude abrir.</span></label>
+          <label class="check"><input type="checkbox" data-check="suite"><span>Conecté la Suite con Claude, Codex, Cursor/VS Code o ChatGPT.</span></label>
+          <label class="check"><input type="checkbox" data-check="first-tool"><span>Probé mi primera herramienta: DevControl o devSteps.</span></label>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+  <section id="s0">
+    <div class="col">
+      <div class="step-h"><div class="num">0</div><h2>¿Qué es esto, en simple?</h2></div>
+      <p class="lead2">Un <b>asistente de IA</b> (como Claude, Codex u opencode) es un programa que conversa contigo y puede <b>hacer trabajo real</b> en tus proyectos: escribir y revisar código, ordenar el proceso, documentar. Las herramientas de la <b>Suite</b> se conectan a ese asistente para darle <b>control y método</b>: que apruebes lo que cambia (DevControl), que siga un orden (devSteps), y más.</p>
+      <div class="callout"><b>La idea clave:</b> tú no tienes que programar todo a mano. Tú <b>diriges</b>, la IA propone y ejecuta, y tú apruebas los cambios importantes.</div>
+    </div>
+  </section>
+
+  <section id="s1">
+    <div class="col">
+      <div class="step-h"><div class="num opt">1</div><h2>Prepara tu equipo <span class="tag free">una sola vez</span></h2></div>
+      <p class="lead2">Casi todos los asistentes de terminal se pueden instalar con <b>Node.js</b>, un programa base gratuito. Instala la versión <b>LTS</b>. <b>Ollama</b> es la excepción: no necesita Node.js.</p>
+      <div class="links" aria-label="Enlaces oficiales de Node.js">
+        <a href="https://nodejs.org/en/download" target="_blank" rel="noreferrer">Descarga oficial de Node.js</a>
+        <a href="https://github.com/nodesource/distributions" target="_blank" rel="noreferrer">NodeSource para Linux</a>
+      </div>
+      <details open><summary>Instalar Node.js - Windows</summary>
+        <ol>
+          <li>Entra a <a href="https://nodejs.org/en/download" target="_blank" rel="noreferrer">nodejs.org/en/download</a> y descarga la versión <b>LTS</b> para Windows.</li>
+          <li>Abre el instalador y acepta la opción que agrega Node al <b>PATH</b>.</li>
+          <li>Cierra y vuelve a abrir <b>PowerShell</b>.</li>
+          <li>Verifica:
+            <div class="cmd"><code id="n1">node --version</code><button class="copy" data-copy="#n1">Copiar</button></div>
+            <div class="cmd"><code id="n1b">npm --version</code><button class="copy" data-copy="#n1b">Copiar</button></div>
+          </li>
+        </ol>
+      </details>
+      <details><summary>Instalar Node.js - Mac</summary>
+        <ol>
+          <li>Descarga la versión <b>LTS</b> en <a href="https://nodejs.org/en/download" target="_blank" rel="noreferrer">nodejs.org/en/download</a> e instala el archivo <code>.pkg</code>.</li>
+          <li>Si ya usas Homebrew, también puedes instalarlo así:
+            <div class="cmd"><code id="n2">brew install node</code><button class="copy" data-copy="#n2">Copiar</button></div>
+          </li>
+          <li>Verifica en <b>Terminal</b>:
+            <div class="cmd"><code id="n2b">node --version && npm --version</code><button class="copy" data-copy="#n2b">Copiar</button></div>
+          </li>
+        </ol>
+      </details>
+      <details><summary>Instalar Node.js - Linux Ubuntu/Debian</summary>
+        <ol>
+          <li>Opción simple desde NodeSource:
+            <div class="cmd"><code id="n3">curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash - && sudo apt install -y nodejs</code><button class="copy" data-copy="#n3">Copiar</button></div>
+          </li>
+          <li>Verifica:
+            <div class="cmd"><code id="n3b">node --version && npm --version</code><button class="copy" data-copy="#n3b">Copiar</button></div>
+          </li>
+          <li>En Fedora, Arch u otra distro, usa el gestor de paquetes de tu sistema o las instrucciones oficiales de Node.js.</li>
+        </ol>
+      </details>
+      <div class="trouble"><b>Nota de permisos:</b> los comandos <code>npm install -g</code> instalan programas globales. Si aparece <code>EACCES</code> o “permission denied”, no adivines: en Mac/Linux usa un gestor como <code>nvm</code> o corrige permisos de npm; en Windows abre PowerShell como administrador solo si entiendes por qué.</div>
+    </div>
+  </section>
+
+  <section id="s2">
+    <div class="col">
+      <div class="step-h"><div class="num">2</div><h2>Instala tu asistente de IA</h2></div>
+      <p class="lead2">Elige uno para empezar. Puedes tener varios después. Para empezar rápido: <b>Claude Code</b> o <b>Codex</b>. Si quieres IA local y privacidad: <b>Ollama</b>. Si quieres probar varios proveedores: <b>opencode</b>.</p>
+      <div class="chips" role="group" aria-label="Elige tu asistente">
+        <button class="chip" data-path="claude" aria-pressed="false"><span class="ic">◆</span> Claude Code</button>
+        <button class="chip" data-path="codex" aria-pressed="false"><span class="ic">›_</span> Codex</button>
+        <button class="chip" data-path="opencode" aria-pressed="false"><span class="ic">▟</span> opencode</button>
+        <button class="chip" data-path="ollama" aria-pressed="false"><span class="ic">⬡</span> Ollama (local/gratis)</button>
+      </div>
+
+      <div class="path" id="p-claude">
+        <h3>Claude Code <span class="tag free">de Anthropic</span></h3>
+        <p class="sub">Asistente en tu terminal. Requiere Node.js 18 o superior y una cuenta compatible de Claude o Anthropic.</p>
+        <div class="links">
+          <a href="https://docs.anthropic.com/en/docs/claude-code/getting-started" target="_blank" rel="noreferrer">Guía oficial de Claude Code</a>
+          <a href="https://docs.anthropic.com/en/docs/claude-code/cli-usage" target="_blank" rel="noreferrer">Comandos oficiales</a>
+        </div>
+        <ol>
+          <li>Instálalo:
+            <div class="cmd"><code id="i-claude">npm install -g @anthropic-ai/claude-code</code><button class="copy" data-copy="#i-claude">Copiar</button></div>
+          </li>
+          <li>Verifica la instalación:
+            <div class="cmd"><code id="v-claude">claude --version</code><button class="copy" data-copy="#v-claude">Copiar</button></div>
+            <div class="cmd"><code id="v-claude2">claude doctor</code><button class="copy" data-copy="#v-claude2">Copiar</button></div>
+          </li>
+          <li>Entra a la carpeta de tu proyecto y arráncalo:
+            <div class="cmd"><code id="r-claude">cd ruta/de/tu/proyecto && claude</code><button class="copy" data-copy="#r-claude">Copiar</button></div>
+          </li>
+          <li>Inicia sesión cuando lo pida. Puede usar Claude Pro/Max, Anthropic Console o una configuración empresarial.</li>
+        </ol>
+        <div class="trouble"><b>Si falla:</b> Anthropic recomienda no usar <code>sudo npm install -g</code> para Claude Code; si ves permisos, revisa la configuración de npm o usa el instalador recomendado por la guía oficial.</div>
+      </div>
+
+      <div class="path" id="p-codex">
+        <h3>Codex <span class="tag free">de OpenAI</span></h3>
+        <p class="sub">Asistente de OpenAI para trabajar desde terminal, editor o app. Puedes entrar con ChatGPT o usar API key.</p>
+        <div class="links">
+          <a href="https://openai.com/codex/get-started/" target="_blank" rel="noreferrer">Inicio oficial de Codex</a>
+          <a href="https://github.com/openai/codex" target="_blank" rel="noreferrer">Repositorio oficial</a>
+          <a href="https://www.npmjs.com/package/@openai/codex" target="_blank" rel="noreferrer">Paquete npm</a>
+        </div>
+        <ol>
+          <li>Instalador directo para Mac/Linux:
+            <div class="cmd"><code id="i-codex-sh">curl -fsSL https://chatgpt.com/codex/install.sh | sh</code><button class="copy" data-copy="#i-codex-sh">Copiar</button></div>
+          </li>
+          <li>Instalador directo para Windows PowerShell:
+            <div class="cmd"><code id="i-codex-ps">powershell -ExecutionPolicy ByPass -c "irm https://chatgpt.com/codex/install.ps1 | iex"</code><button class="copy" data-copy="#i-codex-ps">Copiar</button></div>
+          </li>
+          <li>Alternativa con npm si ya instalaste Node.js:
+            <div class="cmd"><code id="i-codex">npm install -g @openai/codex</code><button class="copy" data-copy="#i-codex">Copiar</button></div>
+          </li>
+          <li>Verifica y entra:
+            <div class="cmd"><code id="v-codex">codex --version</code><button class="copy" data-copy="#v-codex">Copiar</button></div>
+            <div class="cmd"><code id="l-codex">codex --login</code><button class="copy" data-copy="#l-codex">Copiar</button></div>
+          </li>
+          <li>Arráncalo dentro de la carpeta de tu proyecto:
+            <div class="cmd"><code id="r-codex">cd ruta/de/tu/proyecto && codex</code><button class="copy" data-copy="#r-codex">Copiar</button></div>
+          </li>
+        </ol>
+        <div class="trouble"><b>Si falla:</b> si <code>codex</code> no aparece, cierra y abre la terminal; si sigue igual, revisa que la carpeta global de npm esté en el <code>PATH</code> o usa el instalador directo.</div>
+      </div>
+
+      <div class="path" id="p-opencode">
+        <h3>opencode <span class="tag free">multi-proveedor</span></h3>
+        <p class="sub">Asistente de terminal que funciona con muchos proveedores, con ChatGPT/Copilot y también con modelos locales.</p>
+        <div class="links">
+          <a href="https://opencode.ai/docs" target="_blank" rel="noreferrer">Documentación oficial de opencode</a>
+          <a href="https://opencode.ai/download" target="_blank" rel="noreferrer">Descargas oficiales</a>
+        </div>
+        <ol>
+          <li>Instalador recomendado en Mac/Linux/WSL:
+            <div class="cmd"><code id="i-oc">curl -fsSL https://opencode.ai/install | bash</code><button class="copy" data-copy="#i-oc">Copiar</button></div>
+          </li>
+          <li>Alternativa con Node.js:
+            <div class="cmd"><code id="i-oc-npm">npm i -g opencode-ai</code><button class="copy" data-copy="#i-oc-npm">Copiar</button></div>
+          </li>
+          <li>En Mac con Homebrew:
+            <div class="cmd"><code id="i-oc-brew">brew install anomalyco/tap/opencode</code><button class="copy" data-copy="#i-oc-brew">Copiar</button></div>
+          </li>
+          <li>Verifica e inicia:
+            <div class="cmd"><code id="v-oc">opencode --version</code><button class="copy" data-copy="#v-oc">Copiar</button></div>
+            <div class="cmd"><code id="r-oc">cd ruta/de/tu/proyecto && opencode</code><button class="copy" data-copy="#r-oc">Copiar</button></div>
+          </li>
+          <li>Conecta proveedor con el comando <code>/connect</code> dentro de opencode, o usa Ollama local si quieres empezar sin pagar.</li>
+        </ol>
+        <div class="trouble"><b>Windows:</b> opencode recomienda WSL para una experiencia más estable. Si trabajas en Windows puro, usa la app de escritorio o prueba en WSL.</div>
+      </div>
+
+      <div class="path" id="p-ollama">
+        <h3>Ollama <span class="tag local">local · gratis · sin internet</span></h3>
+        <p class="sub">Corre modelos de IA <b>en tu propio equipo</b>. Ideal para privacidad y para aprender sin pagar por uso. No necesita Node.js.</p>
+        <div class="links">
+          <a href="https://ollama.com/download" target="_blank" rel="noreferrer">Descarga oficial de Ollama</a>
+          <a href="https://docs.ollama.com/linux" target="_blank" rel="noreferrer">Instalación Linux</a>
+          <a href="https://docs.ollama.com/macos" target="_blank" rel="noreferrer">Instalación Mac</a>
+        </div>
+        <ol>
+          <li>Windows/Mac: descarga el instalador desde <a href="https://ollama.com/download" target="_blank" rel="noreferrer">ollama.com/download</a>.</li>
+          <li>Linux:
+            <div class="cmd"><code id="i-oll">curl -fsSL https://ollama.com/install.sh | sh</code><button class="copy" data-copy="#i-oll">Copiar</button></div>
+          </li>
+          <li>Verifica:
+            <div class="cmd"><code id="v-oll">ollama -v</code><button class="copy" data-copy="#v-oll">Copiar</button></div>
+          </li>
+          <li>Baja y prueba un modelo pequeño:
+            <div class="cmd"><code id="i-oll2">ollama run llama3.2</code><button class="copy" data-copy="#i-oll2">Copiar</button></div>
+          </li>
+          <li>Para conectar otras herramientas, usa la dirección local:
+            <div class="cmd"><code id="oll-url">http://localhost:11434</code><button class="copy" data-copy="#oll-url">Copiar</button></div>
+          </li>
+        </ol>
+        <div class="callout"><b>Por qué importa:</b> con Ollama, los modelos corren en tu equipo. La primera descarga necesita internet; después puedes usar el modelo descargado sin conexión.</div>
+      </div>
+
+      <details style="margin-top:18px"><summary>Errores comunes y solución rápida</summary>
+        <div class="trouble"><b>“command not found” o “no se reconoce el comando”:</b> cierra y vuelve a abrir la terminal; si sigue, revisa que Node, npm o el instalador hayan agregado el programa al <code>PATH</code>.</div>
+        <div class="trouble"><b>“permission denied”, <code>EACCES</code> o permisos de npm:</b> evita repetir comandos al azar; usa <code>nvm</code>, corrige la carpeta global de npm o instala con el instalador oficial.</div>
+        <div class="trouble"><b>El navegador no abre para iniciar sesión:</b> copia el enlace que muestra la terminal y pégalo manualmente en tu navegador.</div>
+        <div class="trouble"><b>La terminal se queda “pensando”:</b> revisa internet, cierra con <code>Ctrl+C</code> y vuelve a ejecutar el comando de verificación.</div>
+        <div class="trouble"><b>En Windows algo falla con herramientas de terminal:</b> instala WSL y repite los pasos Linux dentro de Ubuntu/WSL.</div>
+      </details>
+    </div>
+  </section>
+
+  <section id="s3">
+    <div class="col">
+      <div class="step-h"><div class="num">3</div><h2>Conecta la Suite a tu asistente</h2></div>
+      <p class="lead2">Ya con tu asistente instalado, conecta las herramientas. La vía cambia según cuál uses.</p>
+      <div class="chips" role="group" aria-label="Elige tu editor">
+        <button class="chip" data-path2="claude" aria-pressed="false"><span class="ic">◆</span> Claude Code</button>
+        <button class="chip" data-path2="cursor" aria-pressed="false"><span class="ic">▮</span> Cursor / VS Code</button>
+        <button class="chip" data-path2="chatgpt" aria-pressed="false"><span class="ic">✱</span> ChatGPT</button>
+        <button class="chip" data-path2="codex" aria-pressed="false"><span class="ic">›_</span> Codex</button>
+      </div>
+      <div class="path" id="q-claude"><h3>Claude Code - plugin o MCP</h3>
+        <ol>
+          <li>Pega en Claude:
+            <div class="cmd"><code id="cc1">Instala el plugin de DevControl de la Suite y verifica que quede conectado como MCP.</code><button class="copy" data-copy="#cc1">Copiar</button></div>
+          </li>
+          <li>Empieza por <b>DevControl</b>. Cuando funcione, repite para devSteps y las demás herramientas.</li>
+          <li>Verifica pidiéndole: “lista las herramientas MCP disponibles y dime si DevControl aparece”.</li>
+        </ol>
+      </div>
+      <div class="path" id="q-cursor"><h3>Cursor / VS Code - la pestaña</h3>
+        <ol>
+          <li>Genera el paquete <code>.vsix</code> de la extensión desde la carpeta de la herramienta. Normalmente se hace con:
+            <div class="cmd"><code id="vsix1">npm install && npx vsce package</code><button class="copy" data-copy="#vsix1">Copiar</button></div>
+          </li>
+          <li>Si el proyecto usa otro empaquetador, busca en su <code>package.json</code> un script como <code>package</code>, <code>build</code> o <code>vsix</code> y ejecútalo.</li>
+          <li>Instala el archivo generado en VS Code/Cursor: abre extensiones, menú de tres puntos, <b>Install from VSIX...</b>.</li>
+          <li>También puedes usar terminal:
+            <div class="cmd"><code id="vsix2">code --install-extension nombre-del-archivo.vsix</code><button class="copy" data-copy="#vsix2">Copiar</button></div>
+          </li>
+          <li>Abre la pestaña <b>Suite</b> en la barra lateral y pulsa <em>Conectar</em>.</li>
+        </ol>
+        <div class="verify"><b>Verifica:</b> reinicia el editor y confirma que aparece la pestaña <b>Suite</b>. Si no aparece, revisa que instalaste el <code>.vsix</code> correcto.</div>
+      </div>
+      <div class="path" id="q-chatgpt"><h3>ChatGPT - empieza por linkAnalizer</h3>
+        <ol>
+          <li>Levanta linkAnalizer localmente.</li>
+          <li>En ChatGPT crea una <b>GPT Action</b> e importa su <code>openapi.yaml</code>.</li>
+          <li>Verifica ejecutando una acción de prueba con un enlace sencillo.</li>
+        </ol>
+      </div>
+      <div class="path" id="q-codex"><h3>Codex - por MCP</h3>
+        <ol>
+          <li>Agrega DevControl como MCP:
+            <div class="cmd"><code id="qc1">codex mcp add sp-devcontrol -- sp-devcontrol mcp</code><button class="copy" data-copy="#qc1">Copiar</button></div>
+          </li>
+          <li>Verifica en Codex: pregunta “lista tus servidores MCP y confirma si sp-devcontrol está activo”.</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section id="s4">
+    <div class="col">
+      <div class="step-h"><div class="num">4</div><h2>Cómo se trabaja: tú diriges, los agentes ejecutan</h2></div>
+      <p class="lead2">Así trabaja un equipo con esta suite: un humano coordina, la IA planifica, los agentes ejecutan tareas acotadas, y se revisa todo. Tú eres el <b>director</b>.</p>
+      <div class="flow">
+        <div class="row"><div class="role">1. Tú<span class="who">humano</span></div><div class="txt">Dices <b>qué</b> quieres lograr, en lenguaje normal. Ejemplo: <em>“revisa la seguridad de mi proyecto y arregla lo crítico”.</em></div></div>
+        <div class="row"><div class="role">2. Asistente<span class="who">Claude/Codex</span></div><div class="txt"><b>Planifica</b> y divide el trabajo en tareas. Si son muchas o repetitivas, las puede delegar a agentes locales.</div></div>
+        <div class="row"><div class="role">3. Agentes<span class="who">en paralelo</span></div><div class="txt"><b>Ejecutan</b> cada tarea: escriben, revisan, prueban o documentan. Pueden correr varios a la vez.</div></div>
+        <div class="row"><div class="role">4. DevControl<span class="who">gobernanza</span></div><div class="txt">Ningún cambio importante se aplica sin que <b>tú apruebes</b>. La IA no se auto-aprueba.</div></div>
+        <div class="row"><div class="role">5. Revisión<span class="who">tú + guía</span></div><div class="txt">Revisas resultados, corres pruebas y confirmas. devSteps mantiene el <b>orden</b> del proceso.</div></div>
+      </div>
+      <div class="callout"><b>Ahorro real:</b> delegar tareas acotadas a agentes locales (opencode/Ollama) puede reducir costos. La suite trae <b>llmgraph</b>, que comprime documentación para que la IA use solo el contexto relevante.</div>
+      <details style="margin-top:16px"><summary>Ejemplo concreto de un encargo</summary>
+        <p>Le dices a tu asistente: <em>“prepara mi proyecto para publicar: revisa seguridad, corre los tests y déjame los pasos para subirlo a GitHub”.</em> El asistente planifica, delega la auditoría a un agente, otro corre los tests, tú apruebas los cambios con DevControl, y te entrega el resultado revisado con comandos listos.</p>
+      </details>
+    </div>
+  </section>
+
+  <section id="s5">
+    <div class="col">
+      <div class="step-h"><div class="num">5</div><h2>Tu primera herramienta</h2></div>
+      <p class="lead2">Empieza por una. Este es el orden recomendado. Cada tarjeta copia el mensaje para tu primer uso.</p>
+      <div class="tools" id="tools"></div>
+      <div class="tool infra" style="margin-top:14px">
+        <div class="row"><h3>llmgraph</h3><span class="tag demo">se activa solo</span></div>
+        <p class="goal">Por detrás: comprime la documentación y le entrega a la IA solo lo relevante. Menos tokens, más barato. No tienes que configurarlo al inicio.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="s6" style="border-bottom:none">
+    <div class="col">
+      <div class="step-h"><div class="num">6</div><h2>Dudas frecuentes</h2></div>
+      <details><summary>Nunca instalé nada por terminal. ¿Puedo?</summary><p>Sí. La terminal es una ventana donde pegas comandos. Usa los botones “Copiar”. Si te trabas, copia el error exacto y pégalo en tu chat de IA.</p></details>
+      <details><summary>¿Necesito pagar?</summary><p>No para empezar: <b>Ollama</b> es gratis y local. Claude/Codex pueden requerir plan o API según tu caso. opencode puede funcionar con varios proveedores o con Ollama.</p></details>
+      <details><summary>¿Es seguro? ¿La IA hará cosas sin permiso?</summary><p>La Suite está pensada para control humano. Con <b>DevControl</b>, los cambios importantes pasan por aprobación. Aun así, revisa antes de aceptar.</p></details>
+      <details><summary>Me pide una clave, token o contraseña</summary><p>No la compartas si no sabes qué es. Pregúntale primero a tu asistente “¿qué clave me pide, dónde se crea y cómo se guarda?”. Nunca pegues claves en lugares públicos.</p></details>
+      <details><summary>¿Qué hago si algo no coincide con mi pantalla?</summary><p>Los instaladores cambian. Usa el enlace oficial del producto, busca la opción LTS o estable, y verifica con el comando de versión antes de avanzar.</p></details>
+    </div>
+  </section>
+  </main>
+
+  <footer><div class="col">Suite de Gobernanza IA - SolucionesPro (Ecuador) · Escribe <strong>“guía”</strong> en tu chat cuando quieras que te acompañe.</div></footer>
+  <div class="toast" id="toast" role="status" aria-live="polite">¡Copiado! Ya puedes pegarlo</div>
+</div>
+
+<script>
+(function(){
+  var TOOLS=[
+    {id:"devcontrol",name:"DevControl",tag:"ga",ord:"1º",goal:"Controla y aprueba lo que la IA cambia. Nada importante pasa sin tu visto bueno.",first:"Revisa mis cambios con DevControl y dime qué debo aprobar."},
+    {id:"devsteps",name:"devSteps",tag:"ga",ord:"2º",goal:"Hace que la IA siga un proceso ordenado para crear software.",first:"Guía el siguiente paso de mi proyecto con devSteps."},
+    {id:"linkanalizer",name:"linkAnalizer",tag:"ga",ord:"3º",goal:"Analiza un enlace y guarda evidencia trazable, con informe.",first:"Analiza este enlace con linkAnalizer y guárdame la evidencia."},
+    {id:"forgepilot",name:"ForgePilot",tag:"ga",ord:"4º",goal:"Instala componentes y automatizaciones industriales (PLC, sensores).",first:"Muéstrame los componentes disponibles de ForgePilot."},
+    {id:"asesor1pro",name:"Asesor1Pro",tag:"ga",ord:"5º",goal:"Clasifica y responde consultas comerciales de WhatsApp con un asesor IA — tú apruebas cada respuesta antes de enviarla.",first:"Clasifica este mensaje de cliente con Asesor1Pro y sugiéreme una respuesta."}
+  ];
+  var lbl={ga:"listo",beta:"beta",demo:"demo"};
+  var host=document.getElementById("tools");
+  TOOLS.forEach(function(t){
+    var el=document.createElement("div");el.className="tool";
+    el.innerHTML='<div class="row"><h3>'+t.name+'</h3><span class="tag '+t.tag+'">'+lbl[t.tag]+'</span><span class="ord">'+t.ord+'</span></div><p class="goal">'+t.goal+'</p><div class="cmd"><code id="f-'+t.id+'">'+t.first+'</code><button class="copy" data-copy="#f-'+t.id+'">Copiar</button></div>';
+    host.appendChild(el);
+  });
+
+  var toast=document.getElementById("toast"),tmr;
+  function ping(){toast.classList.add("show");clearTimeout(tmr);tmr=setTimeout(function(){toast.classList.remove("show")},1600);}
+  function fallback(txt){var ta=document.createElement("textarea");ta.value=txt;ta.style.position="fixed";ta.style.opacity="0";document.body.appendChild(ta);ta.select();try{document.execCommand("copy")}catch(e){}document.body.removeChild(ta);}
+  function copyText(txt,btn){var done=function(){if(btn){var o=btn.textContent;btn.classList.add("done");btn.textContent="✓";setTimeout(function(){btn.classList.remove("done");btn.textContent=o},1300);}ping();};
+    if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(done,function(){fallback(txt);done();});}else{fallback(txt);done();}}
+
+  document.addEventListener("click",function(e){
+    var b=e.target.closest("[data-copy]");if(!b)return;var node=document.querySelector(b.getAttribute("data-copy"));if(!node)return;
+    copyText(node.textContent.trim(),b.classList.contains("copy")?b:null);
+    if(!b.classList.contains("copy")){var o=b.textContent;b.textContent="✓ ¡Copiado! Pégalo en tu chat";setTimeout(function(){b.textContent=o},1900);}
+  });
+
+  function wire(attr){var cs=document.querySelectorAll("["+attr+"]");cs.forEach(function(c){c.addEventListener("click",function(){
+    var id=c.getAttribute(attr),pre=attr==="data-path"?"p-":"q-";
+    cs.forEach(function(x){x.setAttribute("aria-pressed",String(x===c));});
+    cs.forEach(function(x){var pane=document.getElementById(pre+x.getAttribute(attr));if(pane)pane.classList.remove("on");});
+    var pane=document.getElementById(pre+id);if(pane){pane.classList.add("on");pane.scrollIntoView({behavior:"smooth",block:"nearest"});}
+  });});}
+  wire("data-path");wire("data-path2");
+
+  document.getElementById("startBtn").addEventListener("click",function(){
+    document.getElementById("s0").scrollIntoView({behavior:"smooth"});
+  });
+
+  var root=document.documentElement,themeBtn=document.getElementById("themeBtn");
+  try{var savedTheme=localStorage.getItem("guia-ia-theme");if(savedTheme){root.setAttribute("data-theme",savedTheme);}}catch(e){}
+  themeBtn.addEventListener("click",function(){
+    var cur=root.getAttribute("data-theme");
+    var next=cur==="dark"?"light":cur==="light"?"dark":(matchMedia("(prefers-color-scheme:dark)").matches?"light":"dark");
+    root.setAttribute("data-theme",next);
+    try{localStorage.setItem("guia-ia-theme",next);}catch(e){}
+  });
+
+  var checks=document.querySelectorAll("[data-check]");
+  checks.forEach(function(input){
+    try{input.checked=localStorage.getItem("guia-ia-check-"+input.getAttribute("data-check"))==="1";}catch(e){}
+    input.addEventListener("change",function(){
+      try{localStorage.setItem("guia-ia-check-"+input.getAttribute("data-check"),input.checked?"1":"0");}catch(e){}
+    });
+  });
+})();
+</script>
+</body>
+</html>
