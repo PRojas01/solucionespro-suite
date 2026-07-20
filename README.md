@@ -16,7 +16,7 @@ Codex, opencode) y te guía él mismo.
 ## Instalación en un solo comando
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/PRojas01/solucionespro-suite/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/PRojas01/solucionespro-suite/master/install.sh | bash
 ```
 
 Esto descarga los 5 módulos, instala sus dependencias, y te imprime los
