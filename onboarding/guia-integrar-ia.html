@@ -202,7 +202,18 @@
   <section id="s1">
     <div class="col">
       <div class="step-h"><div class="num opt">1</div><h2>Prepara tu equipo <span class="tag free">una sola vez</span></h2></div>
-      <p class="lead2">Casi todos los asistentes de terminal se pueden instalar con <b>Node.js</b>, un programa base gratuito. Instala la versión <b>LTS</b>. <b>Ollama</b> es la excepción: no necesita Node.js.</p>
+
+      <h3 style="margin-top:10px">Primero: abre la terminal</h3>
+      <p class="lead2">La <b>terminal</b> es una ventana donde pegas comandos y presionas Enter. Todo lo de esta guía se hace ahí. Así se abre:</p>
+      <ol>
+        <li><b>Windows:</b> pulsa la tecla Windows, escribe <code>PowerShell</code> y ábrelo. (PowerShell es la terminal de Windows.)</li>
+        <li><b>Mac:</b> pulsa <code>Cmd + barra espaciadora</code>, escribe <code>Terminal</code> y presiona Enter.</li>
+        <li><b>Linux:</b> pulsa <code>Ctrl + Alt + T</code>.</li>
+      </ol>
+      <div class="verify"><b>Verifica:</b> verás una ventana con texto y un cursor parpadeando, esperando que escribas. Eso es todo — ahí vas a pegar los comandos de abajo con clic derecho → Pegar (o Ctrl+V / Cmd+V) y Enter.</div>
+
+      <h3 style="margin-top:26px">Instala Node.js</h3>
+      <p class="lead2">Casi todos los asistentes de terminal se pueden instalar con <b>Node.js</b>, un programa base gratuito. Instala la versión <b>LTS</b> (la marcada como estable/recomendada). <b>Ollama</b> es la excepción: no necesita Node.js.</p>
       <div class="links" aria-label="Enlaces oficiales de Node.js">
         <a href="https://nodejs.org/en/download" target="_blank" rel="noreferrer">Descarga oficial de Node.js</a>
         <a href="https://github.com/nodesource/distributions" target="_blank" rel="noreferrer">NodeSource para Linux</a>
@@ -210,18 +221,19 @@
       <details open><summary>Instalar Node.js - Windows</summary>
         <ol>
           <li>Entra a <a href="https://nodejs.org/en/download" target="_blank" rel="noreferrer">nodejs.org/en/download</a> y descarga la versión <b>LTS</b> para Windows.</li>
-          <li>Abre el instalador y acepta la opción que agrega Node al <b>PATH</b>.</li>
+          <li>Abre el instalador y acepta la opción que agrega Node al <b>PATH</b> (el PATH es una lista interna que permite que la terminal encuentre los programas — si el instalador la ofrece, márcala).</li>
           <li>Cierra y vuelve a abrir <b>PowerShell</b>.</li>
           <li>Verifica:
             <div class="cmd"><code id="n1">node --version</code><button class="copy" data-copy="#n1">Copiar</button></div>
             <div class="cmd"><code id="n1b">npm --version</code><button class="copy" data-copy="#n1b">Copiar</button></div>
+            Está bien si ves un número de versión, como <code>v22.14.0</code> — significa que funcionó.
           </li>
         </ol>
       </details>
       <details><summary>Instalar Node.js - Mac</summary>
         <ol>
           <li>Descarga la versión <b>LTS</b> en <a href="https://nodejs.org/en/download" target="_blank" rel="noreferrer">nodejs.org/en/download</a> e instala el archivo <code>.pkg</code>.</li>
-          <li>Si ya usas Homebrew, también puedes instalarlo así:
+          <li>Si ya usas Homebrew, también puedes instalarlo así (si no sabes qué es Homebrew, ignora esta opción y usa el instalador <code>.pkg</code> del paso anterior):
             <div class="cmd"><code id="n2">brew install node</code><button class="copy" data-copy="#n2">Copiar</button></div>
           </li>
           <li>Verifica en <b>Terminal</b>:
@@ -270,10 +282,11 @@
             <div class="cmd"><code id="v-claude">claude --version</code><button class="copy" data-copy="#v-claude">Copiar</button></div>
             <div class="cmd"><code id="v-claude2">claude doctor</code><button class="copy" data-copy="#v-claude2">Copiar</button></div>
           </li>
-          <li>Entra a la carpeta de tu proyecto y arráncalo:
-            <div class="cmd"><code id="r-claude">cd ruta/de/tu/proyecto && claude</code><button class="copy" data-copy="#r-claude">Copiar</button></div>
+          <li>Crea una carpeta de prueba y arráncalo ahí (este comando funciona tal cual, sin que edites nada — crea la carpeta <code>mi-primer-proyecto</code>, entra en ella y abre Claude):
+            <div class="cmd"><code id="r-claude">mkdir mi-primer-proyecto && cd mi-primer-proyecto && claude</code><button class="copy" data-copy="#r-claude">Copiar</button></div>
+            Más adelante, cambia <code>mi-primer-proyecto</code> por la carpeta real donde trabajes.
           </li>
-          <li>Inicia sesión cuando lo pida. Puede usar Claude Pro/Max, Anthropic Console o una configuración empresarial.</li>
+          <li>Inicia sesión cuando lo pida. <b>Si tienes una cuenta normal de Claude, inicia sesión con ella</b> — esa es la opción más simple. (Las opciones Pro/Max, Anthropic Console o empresarial son para casos avanzados; ignóralas si no sabes cuál es la tuya.)</li>
         </ol>
         <div class="trouble"><b>Si falla:</b> Anthropic recomienda no usar <code>sudo npm install -g</code> para Claude Code; si ves permisos, revisa la configuración de npm o usa el instalador recomendado por la guía oficial.</div>
       </div>
@@ -300,9 +313,10 @@
             <div class="cmd"><code id="v-codex">codex --version</code><button class="copy" data-copy="#v-codex">Copiar</button></div>
             <div class="cmd"><code id="l-codex">codex --login</code><button class="copy" data-copy="#l-codex">Copiar</button></div>
           </li>
-          <li>Arráncalo dentro de la carpeta de tu proyecto:
-            <div class="cmd"><code id="r-codex">cd ruta/de/tu/proyecto && codex</code><button class="copy" data-copy="#r-codex">Copiar</button></div>
+          <li>Arráncalo en una carpeta de prueba (funciona tal cual):
+            <div class="cmd"><code id="r-codex">mkdir mi-primer-proyecto && cd mi-primer-proyecto && codex</code><button class="copy" data-copy="#r-codex">Copiar</button></div>
           </li>
+          <li>Cuando pida cómo entrar, <b>elige iniciar sesión con ChatGPT si aparece esa opción</b>. No uses “API key” salvo que ya sepas que tienes una (una API key es una clave de acceso; si no la tienes a mano, ignora esa opción).</li>
         </ol>
         <div class="trouble"><b>Si falla:</b> si <code>codex</code> no aparece, cierra y abre la terminal; si sigue igual, revisa que la carpeta global de npm esté en el <code>PATH</code> o usa el instalador directo.</div>
       </div>
@@ -324,11 +338,11 @@
           <li>En Mac con Homebrew:
             <div class="cmd"><code id="i-oc-brew">brew install anomalyco/tap/opencode</code><button class="copy" data-copy="#i-oc-brew">Copiar</button></div>
           </li>
-          <li>Verifica e inicia:
+          <li>Verifica e inicia en una carpeta de prueba (funciona tal cual):
             <div class="cmd"><code id="v-oc">opencode --version</code><button class="copy" data-copy="#v-oc">Copiar</button></div>
-            <div class="cmd"><code id="r-oc">cd ruta/de/tu/proyecto && opencode</code><button class="copy" data-copy="#r-oc">Copiar</button></div>
+            <div class="cmd"><code id="r-oc">mkdir mi-primer-proyecto && cd mi-primer-proyecto && opencode</code><button class="copy" data-copy="#r-oc">Copiar</button></div>
           </li>
-          <li>Conecta proveedor con el comando <code>/connect</code> dentro de opencode, o usa Ollama local si quieres empezar sin pagar.</li>
+          <li>Ya dentro de opencode, escribe <code>/connect</code> para elegir tu <b>proveedor</b> (el servicio de IA que responderá: ChatGPT, Copilot u Ollama local si quieres empezar sin pagar).</li>
         </ol>
         <div class="trouble"><b>Windows:</b> opencode recomienda WSL para una experiencia más estable. Si trabajas en Windows puro, usa la app de escritorio o prueba en WSL.</div>
       </div>
@@ -373,8 +387,12 @@
     <div class="col">
       <div class="step-h"><div class="num">3</div><h2>Descarga y conecta la Suite</h2></div>
       <p class="lead2">Un solo comando descarga los 5 módulos (DevControl, devSteps, ForgePilot, linkAnalizer, Asesor1Pro), instala lo que necesitan, y te deja listos los comandos de conexión.</p>
+      <p class="lead2"><b>Antes:</b> este comando necesita <b>Git</b> (un programa que descarga proyectos). Instálalo una vez desde <a href="https://git-scm.com/downloads" target="_blank" rel="noreferrer">git-scm.com/downloads</a> (siguiente → siguiente) y verifica con:</p>
+      <div class="cmd"><code id="git-check">git --version</code><button class="copy" data-copy="#git-check">Copiar</button></div>
+      <p class="hint">Está bien si ves algo como <code>git version 2.43.0</code>. Si dice “no se reconoce”, cierra y abre la terminal tras instalar.</p>
       <div class="cmd"><code id="suite-install">curl -fsSL https://raw.githubusercontent.com/PRojas01/solucionespro-suite/master/install.sh | bash</code><button class="copy" data-copy="#suite-install">Copiar</button></div>
-      <div class="verify"><b>Verifica:</b> al terminar verás una carpeta <code>suite-ia/</code> con los 5 módulos, y una lista de comandos de conexión — cópialos según tu editor abajo.</div>
+      <div class="verify"><b>Verifica:</b> al terminar verás una carpeta <code>suite-ia/</code> con los 5 módulos, y una lista de comandos de conexión listos para copiar.</div>
+      <div class="trouble"><b>No cierres esta terminal.</b> Los comandos de conexión de abajo usan la carpeta donde acabas de descargar la Suite. Si cierras la terminal, vuelve a abrirla y escribe <code>cd</code> seguido de la carpeta donde corriste el instalador antes de seguir. En Windows, si el comando <code>bash</code> no existe, instala WSL (busca “instalar WSL” en la web de Microsoft) y repite dentro de Ubuntu.</div>
       <p class="lead2" style="margin-top:22px">Con la Suite ya descargada, conéctala a tu asistente. La vía cambia según cuál uses.</p>
       <div class="chips" role="group" aria-label="Elige tu editor">
         <button class="chip" data-path2="claude" aria-pressed="false"><span class="ic">◆</span> Claude Code</button>
@@ -387,31 +405,38 @@
           <li>Conecta DevControl (ajusta la ruta si descargaste la Suite en otro lugar):
             <div class="cmd"><code id="cc1">claude mcp add sp-devcontrol -- node ./suite-ia/sp-devcontrol/dist/mcp.js</code><button class="copy" data-copy="#cc1">Copiar</button></div>
           </li>
-          <li>Repite para linkAnalizer y Asesor1Pro:
+          <li>Repite para linkAnalizer:
             <div class="cmd"><code id="cc2">claude mcp add linkanalizer -- node ./suite-ia/SP-Linkanalizer/scripts/mcp_server.mjs</code><button class="copy" data-copy="#cc2">Copiar</button></div>
           </li>
-          <li>Verifica pidiéndole: “lista las herramientas MCP disponibles y dime si sp-devcontrol aparece”.</li>
+          <li>Y para Asesor1Pro:
+            <div class="cmd"><code id="cc3">claude mcp add asesor1pro -- node ./suite-ia/Asesor1Pro/scripts/mcp_server.mjs</code><button class="copy" data-copy="#cc3">Copiar</button></div>
+          </li>
+          <li>Verifica pidiéndole: “lista las herramientas MCP disponibles y dime si sp-devcontrol aparece”. <b>MCP</b> es la forma en que tu asistente se conecta a una herramienta externa; no necesitas entenderlo a fondo, solo que estos comandos “enchufan” cada módulo.</li>
         </ol>
       </div>
       <div class="path" id="q-cursor"><h3>Cursor / VS Code - la pestaña</h3>
+        <p class="sub">La “pestaña” es una extensión que aparece en la barra lateral de tu editor. Un <code>.vsix</code> es el archivo instalable de esa extensión.</p>
         <ol>
-          <li>Genera el paquete <code>.vsix</code> de la extensión desde la carpeta de la herramienta. Normalmente se hace con:
-            <div class="cmd"><code id="vsix1">npm install && npx vsce package</code><button class="copy" data-copy="#vsix1">Copiar</button></div>
+          <li>Entra a la carpeta de la extensión de una herramienta (ejemplo con ForgePilot) y genera el <code>.vsix</code>:
+            <div class="cmd"><code id="vsix1">cd suite-ia/ForgePilot/extension && npm install && npx vsce package</code><button class="copy" data-copy="#vsix1">Copiar</button></div>
           </li>
-          <li>Si el proyecto usa otro empaquetador, busca en su <code>package.json</code> un script como <code>package</code>, <code>build</code> o <code>vsix</code> y ejecútalo.</li>
-          <li>Instala el archivo generado en VS Code/Cursor: abre extensiones, menú de tres puntos, <b>Install from VSIX...</b>.</li>
-          <li>También puedes usar terminal:
-            <div class="cmd"><code id="vsix2">code --install-extension nombre-del-archivo.vsix</code><button class="copy" data-copy="#vsix2">Copiar</button></div>
+          <li>Instala el archivo generado en la terminal:
+            <div class="cmd"><code id="vsix2">code --install-extension *.vsix</code><button class="copy" data-copy="#vsix2">Copiar</button></div>
+            (En Cursor/Windsurf cambia <code>code</code> por <code>cursor</code> o <code>windsurf</code>. También puedes instalarlo desde el editor: menú de Extensiones → los tres puntos → <b>Install from VSIX…</b>.)
           </li>
-          <li>Abre la pestaña <b>Suite</b> en la barra lateral y pulsa <em>Conectar</em>.</li>
+          <li>Reinicia el editor y abre la pestaña de la herramienta en la barra lateral.</li>
         </ol>
-        <div class="verify"><b>Verifica:</b> reinicia el editor y confirma que aparece la pestaña <b>Suite</b>. Si no aparece, revisa que instalaste el <code>.vsix</code> correcto.</div>
+        <div class="trouble"><b>¿Prefieres no complicarte?</b> La forma más simple de usar las herramientas es por <b>MCP</b> (pestaña “Claude Code” o “Codex” arriba) o por línea de comandos. La extensión visual es opcional.</div>
       </div>
       <div class="path" id="q-chatgpt"><h3>ChatGPT - empieza por linkAnalizer</h3>
+        <p class="sub">Una <b>GPT Action</b> es una acción personalizada que un GPT de ChatGPT puede ejecutar. Esta ruta es la más técnica; si empiezas de cero, usa mejor Claude Code o Codex arriba.</p>
         <ol>
-          <li>Levanta linkAnalizer localmente.</li>
-          <li>En ChatGPT crea una <b>GPT Action</b> e importa su <code>openapi.yaml</code>.</li>
-          <li>Verifica ejecutando una acción de prueba con un enlace sencillo.</li>
+          <li>Arranca el servidor local de linkAnalizer:
+            <div class="cmd"><code id="cg1">cd suite-ia/SP-Linkanalizer && npm run start</code><button class="copy" data-copy="#cg1">Copiar</button></div>
+            Verás en la terminal una dirección local (algo como <code>http://127.0.0.1:8787</code>). Déjala abierta.
+          </li>
+          <li>En ChatGPT (con plan que permita GPTs personalizados), crea un GPT, ve a <b>Actions</b> e importa el archivo <code>suite-ia/SP-Linkanalizer/chatgpt/openapi.yaml</code>.</li>
+          <li>Prueba pidiéndole al GPT que analice un enlace sencillo.</li>
         </ol>
       </div>
       <div class="path" id="q-codex"><h3>Codex - por MCP</h3>
