@@ -371,21 +371,26 @@
 
   <section id="s3">
     <div class="col">
-      <div class="step-h"><div class="num">3</div><h2>Conecta la Suite a tu asistente</h2></div>
-      <p class="lead2">Ya con tu asistente instalado, conecta las herramientas. La vía cambia según cuál uses.</p>
+      <div class="step-h"><div class="num">3</div><h2>Descarga y conecta la Suite</h2></div>
+      <p class="lead2">Un solo comando descarga los 5 módulos (DevControl, devSteps, ForgePilot, linkAnalizer, Asesor1Pro), instala lo que necesitan, y te deja listos los comandos de conexión.</p>
+      <div class="cmd"><code id="suite-install">curl -fsSL https://raw.githubusercontent.com/PRojas01/solucionespro-suite/master/install.sh | bash</code><button class="copy" data-copy="#suite-install">Copiar</button></div>
+      <div class="verify"><b>Verifica:</b> al terminar verás una carpeta <code>suite-ia/</code> con los 5 módulos, y una lista de comandos de conexión — cópialos según tu editor abajo.</div>
+      <p class="lead2" style="margin-top:22px">Con la Suite ya descargada, conéctala a tu asistente. La vía cambia según cuál uses.</p>
       <div class="chips" role="group" aria-label="Elige tu editor">
         <button class="chip" data-path2="claude" aria-pressed="false"><span class="ic">◆</span> Claude Code</button>
         <button class="chip" data-path2="cursor" aria-pressed="false"><span class="ic">▮</span> Cursor / VS Code</button>
         <button class="chip" data-path2="chatgpt" aria-pressed="false"><span class="ic">✱</span> ChatGPT</button>
         <button class="chip" data-path2="codex" aria-pressed="false"><span class="ic">›_</span> Codex</button>
       </div>
-      <div class="path" id="q-claude"><h3>Claude Code - plugin o MCP</h3>
+      <div class="path" id="q-claude"><h3>Claude Code - MCP</h3>
         <ol>
-          <li>Pega en Claude:
-            <div class="cmd"><code id="cc1">Instala el plugin de DevControl de la Suite y verifica que quede conectado como MCP.</code><button class="copy" data-copy="#cc1">Copiar</button></div>
+          <li>Conecta DevControl (ajusta la ruta si descargaste la Suite en otro lugar):
+            <div class="cmd"><code id="cc1">claude mcp add sp-devcontrol -- node ./suite-ia/sp-devcontrol/dist/mcp.js</code><button class="copy" data-copy="#cc1">Copiar</button></div>
           </li>
-          <li>Empieza por <b>DevControl</b>. Cuando funcione, repite para devSteps y las demás herramientas.</li>
-          <li>Verifica pidiéndole: “lista las herramientas MCP disponibles y dime si DevControl aparece”.</li>
+          <li>Repite para linkAnalizer y Asesor1Pro:
+            <div class="cmd"><code id="cc2">claude mcp add linkanalizer -- node ./suite-ia/SP-Linkanalizer/scripts/mcp_server.mjs</code><button class="copy" data-copy="#cc2">Copiar</button></div>
+          </li>
+          <li>Verifica pidiéndole: “lista las herramientas MCP disponibles y dime si sp-devcontrol aparece”.</li>
         </ol>
       </div>
       <div class="path" id="q-cursor"><h3>Cursor / VS Code - la pestaña</h3>
@@ -411,8 +416,8 @@
       </div>
       <div class="path" id="q-codex"><h3>Codex - por MCP</h3>
         <ol>
-          <li>Agrega DevControl como MCP:
-            <div class="cmd"><code id="qc1">codex mcp add sp-devcontrol -- sp-devcontrol mcp</code><button class="copy" data-copy="#qc1">Copiar</button></div>
+          <li>Agrega DevControl como MCP (mismo patrón que Claude, con <code>codex</code> en vez de <code>claude</code>):
+            <div class="cmd"><code id="qc1">codex mcp add sp-devcontrol -- node ./suite-ia/sp-devcontrol/dist/mcp.js</code><button class="copy" data-copy="#qc1">Copiar</button></div>
           </li>
           <li>Verifica en Codex: pregunta “lista tus servidores MCP y confirma si sp-devcontrol está activo”.</li>
         </ol>
