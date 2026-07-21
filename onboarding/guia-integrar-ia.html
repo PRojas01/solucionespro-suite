@@ -146,9 +146,14 @@
 
   .cmd{background:var(--term-bg);border:1px solid color-mix(in srgb,var(--term-ink) 14%,transparent);
     border-radius:var(--r);overflow:hidden;margin-bottom:var(--sp-3)}
-  .cmd-head{display:flex;align-items:center;gap:var(--sp-2);padding:var(--sp-2) var(--sp-3);border-bottom:1px solid rgba(255,255,255,.06)}
+  .cmd-head{display:flex;align-items:center;gap:var(--sp-2);padding:var(--sp-2) var(--sp-3);border-bottom:1px solid rgba(255,255,255,.06);flex-wrap:wrap}
   .cmd-head .dot{width:9px;height:9px;border-radius:50%;background:#5fd07f;flex:none}
   .cmd-head .lbl{color:var(--term-dim);margin:0;font-size:.7rem}
+  .cmd-head .run{margin-left:auto;font-family:var(--mono);font-size:var(--t-xs);font-weight:700;
+    color:var(--term-bg);background:var(--term-accent);padding:var(--sp-1) var(--sp-2);border-radius:6px;
+    min-height:32px}
+  .cmd-head .run:hover{filter:brightness(1.08)}
+  .cmd-head .run + .copy{margin-left:var(--sp-1)}
   .cmd-head .copy{margin-left:auto;font-family:var(--mono);font-size:var(--t-xs);font-weight:700;
     color:var(--term-accent);padding:var(--sp-1) var(--sp-2);border-radius:6px;min-height:32px}
   .cmd-head .copy:hover{background:rgba(255,255,255,.06)}
@@ -276,7 +281,7 @@
       </div>
       <div id="nodeLinux" class="os-block" hidden>
         <div class="cmd">
-          <div class="cmd-head"><span class="dot"></span><span class="lbl">terminal</span><button class="copy" data-copy="#c-node-linux">copiar</button></div>
+          <div class="cmd-head"><span class="dot"></span><span class="lbl">terminal</span><button class="run" data-run="#c-node-linux">▸ ejecutar</button><button class="copy" data-copy="#c-node-linux">copiar</button></div>
           <div class="cmd-body"><code id="c-node-linux">curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash - &amp;&amp; sudo apt install -y nodejs</code></div>
         </div>
         <p class="hint">Te pedirá tu contraseña. Al escribirla no se ve nada en pantalla — es normal, escribe y pulsa Enter.</p>
@@ -342,7 +347,7 @@
       </div>
       <div id="aiInstall" hidden style="margin-top:var(--sp-5)">
         <div class="cmd">
-          <div class="cmd-head"><span class="dot"></span><span class="lbl" id="aiLbl">terminal</span><button class="copy" data-copy="#c-ai">copiar</button></div>
+          <div class="cmd-head"><span class="dot"></span><span class="lbl" id="aiLbl">terminal</span><button class="run" data-run="#c-ai">▸ ejecutar</button><button class="copy" data-copy="#c-ai">copiar</button></div>
           <div class="cmd-body"><code id="c-ai">—</code></div>
         </div>
         <div class="check-it"><b>▸ Comprobar</b><span id="aiCheckTxt">—</span><code id="c-aiv" hidden>—</code></div>
@@ -364,7 +369,7 @@
     <p class="intro">Cinco herramientas juntas: control de cambios, orquestación, análisis de enlaces y más.</p>
     <div class="step-body">
       <div class="cmd">
-        <div class="cmd-head"><span class="dot"></span><span class="lbl">un comando</span><button class="copy" data-copy="#c-suite">copiar</button></div>
+        <div class="cmd-head"><span class="dot"></span><span class="lbl">un comando</span><button class="run" data-run="#c-suite">▸ ejecutar</button><button class="copy" data-copy="#c-suite">copiar</button></div>
         <div class="cmd-body"><code id="c-suite">curl -fsSL https://raw.githubusercontent.com/PRojas01/solucionespro-suite/master/install.sh | bash</code></div>
       </div>
       <button class="go ghost dl" id="dlInstaller">⤓ O descarga el instalador para revisarlo antes</button>
@@ -384,15 +389,15 @@
     <p class="intro" id="connIntro">Un comando por herramienta. Pégalos en la misma terminal.</p>
     <div class="step-body">
       <div class="cmd">
-        <div class="cmd-head"><span class="dot"></span><span class="lbl">control de cambios</span><button class="copy" data-copy="#c-m1">copiar</button></div>
+        <div class="cmd-head"><span class="dot"></span><span class="lbl">control de cambios</span><button class="run" data-run="#c-m1">▸ ejecutar</button><button class="copy" data-copy="#c-m1">copiar</button></div>
         <div class="cmd-body"><code id="c-m1">—</code></div>
       </div>
       <div class="cmd">
-        <div class="cmd-head"><span class="dot"></span><span class="lbl">análisis de enlaces</span><button class="copy" data-copy="#c-m2">copiar</button></div>
+        <div class="cmd-head"><span class="dot"></span><span class="lbl">análisis de enlaces</span><button class="run" data-run="#c-m2">▸ ejecutar</button><button class="copy" data-copy="#c-m2">copiar</button></div>
         <div class="cmd-body"><code id="c-m2">—</code></div>
       </div>
       <div class="cmd">
-        <div class="cmd-head"><span class="dot"></span><span class="lbl">asesor comercial</span><button class="copy" data-copy="#c-m3">copiar</button></div>
+        <div class="cmd-head"><span class="dot"></span><span class="lbl">asesor comercial</span><button class="run" data-run="#c-m3">▸ ejecutar</button><button class="copy" data-copy="#c-m3">copiar</button></div>
         <div class="cmd-body"><code id="c-m3">—</code></div>
       </div>
       <div class="check-it">
@@ -459,6 +464,13 @@
     if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(ok, function(){ fallback(text); ok(); }); } else { fallback(text); ok(); }
   }
   document.addEventListener("click", function(e){ var b = e.target.closest("[data-copy]"); if(!b) return; var el = document.querySelector(b.getAttribute("data-copy")); if(el) copy(el.textContent.trim(), b); });
+  document.addEventListener("click", function(e){
+    var b = e.target.closest("[data-run]"); if(!b) return;
+    var el = document.querySelector(b.getAttribute("data-run")); if(!el) return;
+    var cmd = el.textContent.trim();
+    var wrapped = "Ejecuta este comando en mi terminal, explícame brevemente qué hace y muéstrame el resultado. Pídeme confirmación si es una instalación o un cambio importante:\n\n" + cmd;
+    copy(wrapped, b, "Copiado para tu asistente — pégalo en Claude o Codex y lo ejecuta con tu aprobación");
+  });
 
   var OS_NAME = { win:"Windows", mac:"Mac", linux:"Linux" };
   function detect(){
