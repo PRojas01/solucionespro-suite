@@ -7,187 +7,214 @@
 <title>Integra IA a tus proyectos</title>
 <style>
   :root{
-    --paper:#f2f6f3; --ink:#141f1b; --panel:#ffffff; --line:#d5e0d9;
-    --muted:#4e6259; --accent:#12805c; --accent-deep:#0a5740; --accent-soft:#e3f0ea;
-    --signal:#9c5a12; --signal-soft:#f7efe3; --ok:#12805c; --bad:#993124;
-
+    --paper:#edf1ea; --ink:#0f1e18; --panel:#f9fbf7; --raise:#ffffff; --line:#d2ddd2;
+    --muted:#485b52; --accent:#0e7a51; --accent-deep:#0a5638; --accent-soft:#dcebe1;
+    --signal:#a55f16; --signal-soft:#f5ebdd;
+    --term-bg:#0b1510; --term-ink:#d7e6dd; --term-dim:#7f978a; --term-accent:#43cf95;
     --t-xs:.75rem; --t-sm:.875rem; --t-base:1rem; --t-md:1.0625rem;
-    --t-lg:1.3125rem; --t-xl:1.75rem; --t-2xl:2.375rem;
+    --t-lg:1.3125rem; --t-xl:1.7rem; --t-2xl:2.4rem;
     --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:24px;
     --sp-6:32px; --sp-7:48px; --sp-8:72px;
-    --r:14px;
-    --mono:ui-monospace,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+    --r:12px;
+    --mono:ui-monospace,"SF Mono","JetBrains Mono",Menlo,Consolas,"Liberation Mono",monospace;
     --sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
   }
   @media (prefers-color-scheme:dark){
-    :root{--paper:#0c1512; --ink:#e7efea; --panel:#141f1b; --line:#28382f;
-      --muted:#9db0a6; --accent:#33b184; --accent-deep:#5fcfa5; --accent-soft:#122a21;
-      --signal:#e8ad63; --signal-soft:#2a2317; --ok:#5fcfa5; --bad:#ef8b7d;}
+    :root{--paper:#0a120f; --ink:#e4ede7; --panel:#111b16; --raise:#16221b; --line:#233229;
+      --muted:#94a99e; --accent:#37c68b; --accent-deep:#66d9ab; --accent-soft:#10241b;
+      --signal:#e2a961; --signal-soft:#241d12;
+      --term-bg:#060d0a; --term-ink:#d7e6dd; --term-dim:#6f877b; --term-accent:#43cf95;}
   }
-  :root[data-theme="dark"]{--paper:#0c1512; --ink:#e7efea; --panel:#141f1b; --line:#28382f;
-    --muted:#9db0a6; --accent:#33b184; --accent-deep:#5fcfa5; --accent-soft:#122a21;
-    --signal:#e8ad63; --signal-soft:#2a2317; --ok:#5fcfa5; --bad:#ef8b7d;}
-  :root[data-theme="light"]{--paper:#f2f6f3; --ink:#141f1b; --panel:#ffffff; --line:#d5e0d9;
-    --muted:#4e6259; --accent:#12805c; --accent-deep:#0a5740; --accent-soft:#e3f0ea;
-    --signal:#9c5a12; --signal-soft:#f7efe3; --ok:#12805c; --bad:#993124;}
+  :root[data-theme="dark"]{--paper:#0a120f; --ink:#e4ede7; --panel:#111b16; --raise:#16221b; --line:#233229;
+    --muted:#94a99e; --accent:#37c68b; --accent-deep:#66d9ab; --accent-soft:#10241b;
+    --signal:#e2a961; --signal-soft:#241d12;
+    --term-bg:#060d0a; --term-ink:#d7e6dd; --term-dim:#6f877b; --term-accent:#43cf95;}
+  :root[data-theme="light"]{--paper:#edf1ea; --ink:#0f1e18; --panel:#f9fbf7; --raise:#ffffff; --line:#d2ddd2;
+    --muted:#485b52; --accent:#0e7a51; --accent-deep:#0a5638; --accent-soft:#dcebe1;
+    --signal:#a55f16; --signal-soft:#f5ebdd;
+    --term-bg:#0b1510; --term-ink:#d7e6dd; --term-dim:#7f978a; --term-accent:#43cf95;}
 
   *{box-sizing:border-box}
   html{scroll-behavior:smooth}
   body{margin:0;overflow-x:hidden}
   .wrap{background:var(--paper);color:var(--ink);font-family:var(--sans);
     line-height:1.6;-webkit-font-smoothing:antialiased;min-height:100vh;overflow-x:clip}
-  .col{width:100%;max-width:680px;margin:0 auto;padding:0 var(--sp-5)}
-  h1,h2,h3{margin:0;line-height:1.15;text-wrap:balance}
+  .col{width:100%;max-width:640px;margin:0 auto;padding:0 var(--sp-5)}
   p{margin:0}
   button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit}
   a{color:var(--accent-deep);font-weight:640;text-underline-offset:3px}
   :is(a,button,input,summary):focus-visible{outline:3px solid var(--signal);outline-offset:3px;border-radius:6px}
 
-  /* mono como cara de display: etiquetas, anclado al tema (la terminal) */
+  h1,h2,h3,.mono{font-family:var(--mono);letter-spacing:-.02em}
   .lbl{font-family:var(--mono);font-size:var(--t-xs);text-transform:uppercase;
-    letter-spacing:.09em;color:var(--muted);font-weight:600}
+    letter-spacing:.11em;color:var(--muted);font-weight:600}
 
-  /* ── barra superior: progreso + tema ───────────────────────── */
-  .bar{position:sticky;top:0;z-index:40;background:color-mix(in srgb,var(--paper) 92%,transparent);
-    backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .bar{position:sticky;top:0;z-index:40;background:color-mix(in srgb,var(--paper) 90%,transparent);
+    backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
   .bar .col{display:flex;align-items:center;gap:var(--sp-4);padding-block:var(--sp-3)}
-  .track{flex:1;min-width:0;height:6px;border-radius:99px;background:var(--line);overflow:hidden}
-  .fill{height:100%;width:0;background:var(--accent);border-radius:99px;
-    transition:width .45s cubic-bezier(.4,0,.2,1)}
+  #stepLbl{font-family:var(--mono);font-size:var(--t-xs);color:var(--muted);white-space:nowrap;letter-spacing:.04em}
+  .track{flex:1;min-width:0;height:5px;border-radius:99px;background:var(--line);overflow:hidden}
+  .fill{height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent-deep));
+    border-radius:99px;transition:width .5s cubic-bezier(.4,0,.2,1)}
   .pct{font-family:var(--mono);font-size:var(--t-xs);font-variant-numeric:tabular-nums;
-    color:var(--muted);white-space:nowrap}
+    color:var(--accent-deep);white-space:nowrap;font-weight:700}
   .icon-btn{width:44px;height:44px;display:grid;place-items:center;border-radius:9px;
     border:1px solid var(--line);background:var(--panel);font-size:var(--t-base);flex:none}
   .icon-btn:hover{border-color:var(--accent)}
 
-  /* ── hero ──────────────────────────────────────────────────── */
   header{padding:var(--sp-8) 0 var(--sp-6)}
-  header h1{font-size:clamp(1.9rem,7vw,var(--t-2xl));font-weight:800;letter-spacing:-.02em;
-    margin-bottom:var(--sp-3)}
-  header p{font-size:var(--t-md);color:var(--muted);max-width:46ch}
+  .eyebrow{display:inline-flex;align-items:center;gap:var(--sp-2);font-family:var(--mono);
+    font-size:var(--t-xs);text-transform:uppercase;letter-spacing:.14em;color:var(--accent-deep);font-weight:700}
+  .eyebrow::before{content:"";width:22px;height:1px;background:var(--accent)}
+  header h1{font-size:clamp(2rem,8vw,var(--t-2xl));font-weight:750;line-height:1.05;margin:var(--sp-3) 0}
+  header h1 .cursor{display:inline-block;width:.6ch;height:1.05em;background:var(--accent);
+    margin-left:.08em;vertical-align:-.14em;animation:blink 1.1s steps(1) infinite}
+  @keyframes blink{50%{opacity:0}}
+  header p.sub{font-size:var(--t-md);color:var(--muted);max-width:44ch}
+
+  .terminal{margin-top:var(--sp-6);border-radius:var(--r);overflow:hidden;
+    background:var(--term-bg);border:1px solid color-mix(in srgb,var(--term-ink) 16%,transparent);
+    box-shadow:0 18px 40px -20px rgba(0,0,0,.5)}
+  .term-bar{display:flex;align-items:center;gap:7px;padding:var(--sp-3) var(--sp-4);border-bottom:1px solid rgba(255,255,255,.07)}
+  .term-bar i{width:11px;height:11px;border-radius:50%;display:block}
+  .term-bar i:nth-child(1){background:#f0685f}.term-bar i:nth-child(2){background:#f5bf4f}.term-bar i:nth-child(3){background:#5fd07f}
+  .term-bar span{margin-left:auto;font-family:var(--mono);font-size:var(--t-xs);color:var(--term-dim)}
+  .term-body{padding:var(--sp-4) var(--sp-4) var(--sp-5);font-family:var(--mono);
+    font-size:var(--t-sm);line-height:1.7;color:var(--term-ink);overflow-x:auto}
+  .term-body .p{color:var(--term-accent)}
+  .term-body .o{color:var(--term-dim);display:block}
+  .term-body .cur{display:inline-block;width:.55ch;height:1.05em;background:var(--term-accent);
+    vertical-align:-.16em;animation:blink 1.1s steps(1) infinite}
 
   .os{display:flex;align-items:center;gap:var(--sp-3);margin-top:var(--sp-5);
     padding:var(--sp-3) var(--sp-4);background:var(--panel);border:1px solid var(--line);
     border-radius:var(--r);font-size:var(--t-sm);flex-wrap:wrap}
-  .os b{font-weight:680}
+  .os b{font-weight:680;font-family:var(--mono)}
   .os button{font-size:var(--t-xs);color:var(--accent-deep);font-weight:660;
     text-decoration:underline;text-underline-offset:3px;margin-left:auto;min-height:44px;padding:0 var(--sp-2)}
   .os-pick{display:flex;gap:var(--sp-2);width:100%;margin-top:var(--sp-2)}
   .os-pick[hidden]{display:none}
   .os-pick button{flex:1;margin:0;padding:var(--sp-2);min-height:44px;border:1px solid var(--line);
     border-radius:9px;background:var(--paper);font-size:var(--t-sm);font-weight:640;
-    text-decoration:none;color:var(--ink)}
+    font-family:var(--mono);text-decoration:none;color:var(--ink)}
   .os-pick button:hover{border-color:var(--accent);background:var(--accent-soft)}
 
   .resume{display:none;margin-top:var(--sp-5);padding:var(--sp-4);border-radius:var(--r);
-    background:var(--signal-soft);border:1px solid var(--line);font-size:var(--t-sm)}
+    background:var(--signal-soft);border:1px solid color-mix(in srgb,var(--signal) 35%,var(--line));font-size:var(--t-sm)}
   .resume.on{display:flex;align-items:center;gap:var(--sp-3);flex-wrap:wrap}
-  .resume b{font-weight:680}
+  .resume b{font-weight:680;font-family:var(--mono)}
 
-  /* ── pasos ─────────────────────────────────────────────────── */
-  .step{border-top:1px solid var(--line);padding:var(--sp-7) 0}
-  .step-top{display:flex;align-items:center;gap:var(--sp-3);margin-bottom:var(--sp-2)}
-  .badge{width:30px;height:30px;flex:none;border-radius:9px;display:grid;place-items:center;
-    background:var(--ink);color:var(--paper);font-family:var(--mono);font-size:var(--t-sm);
-    font-weight:700;font-variant-numeric:tabular-nums;transition:background .3s}
-  .step.done .badge{background:var(--accent);color:#fff}
-  .step h2{font-size:var(--t-xl);font-weight:760;letter-spacing:-.01em}
-  .step > .col > p{color:var(--muted);margin-bottom:var(--sp-5);max-width:52ch}
+  main{position:relative}
+  .step{padding:var(--sp-7) 0;position:relative}
+  .step::before{content:"";position:absolute;left:calc(var(--sp-5) + 16px);top:0;bottom:0;width:2px;background:var(--line)}
+  .step:last-of-type::before{display:none}
+  .step .col{position:relative}
+  .step-top{display:flex;align-items:center;gap:var(--sp-4);margin-bottom:var(--sp-2)}
+  .badge{width:34px;height:34px;flex:none;border-radius:10px;display:grid;place-items:center;
+    background:var(--paper);border:2px solid var(--line);color:var(--muted);font-family:var(--mono);
+    font-size:var(--t-sm);font-weight:700;font-variant-numeric:tabular-nums;transition:all .3s;position:relative;z-index:1}
+  .step.active .badge{border-color:var(--accent);color:var(--accent-deep)}
+  .step.done .badge{background:var(--accent);border-color:var(--accent);color:#fff}
+  .step h2{font-size:var(--t-xl);font-weight:720;line-height:1.1}
+  .step .intro{color:var(--muted);margin:var(--sp-1) 0 var(--sp-5);max-width:50ch;padding-left:calc(34px + var(--sp-4))}
+  .step-body{padding-left:calc(34px + var(--sp-4))}
+  @media (max-width:520px){ .step::before,.step .badge{display:none} .step .intro,.step-body{padding-left:0} }
 
-  /* ── opciones (elegir asistente) ───────────────────────────── */
   .opts{display:grid;gap:var(--sp-3)}
   .opt{display:flex;align-items:center;gap:var(--sp-4);width:100%;text-align:left;
     padding:var(--sp-4);background:var(--panel);border:1px solid var(--line);
-    border-radius:var(--r);transition:border-color .2s,transform .08s}
+    border-radius:var(--r);transition:border-color .18s,transform .08s,background .18s}
   .opt:hover{border-color:var(--accent)}
   .opt:active{transform:scale(.995)}
-  .opt[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft);
-    box-shadow:inset 0 0 0 1px var(--accent)}
+  .opt[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft);box-shadow:inset 0 0 0 1px var(--accent)}
   .opt .g{flex:1;min-width:0}
-  .opt strong{display:block;font-size:var(--t-md);font-weight:700}
-  .opt span{display:block;font-size:var(--t-sm);color:var(--muted)}
-  .opt .pick{font-family:var(--mono);font-size:var(--t-xs);color:var(--accent-deep);
-    font-weight:700;opacity:0;transition:opacity .2s}
+  .opt strong{display:block;font-size:var(--t-md);font-weight:700;font-family:var(--mono);letter-spacing:-.01em}
+  .opt span{display:block;font-size:var(--t-sm);color:var(--muted);margin-top:1px}
+  .opt .pick{font-family:var(--mono);font-size:var(--t-base);color:var(--accent-deep);font-weight:700;opacity:0;transition:opacity .2s}
   .opt[aria-pressed="true"] .pick{opacity:1}
-  .rec{font-family:var(--mono);font-size:var(--t-xs);text-transform:uppercase;
-    letter-spacing:.08em;color:var(--accent-deep);background:var(--accent-soft);
-    border:1px solid var(--accent);padding:2px 7px;border-radius:99px;font-weight:700}
+  .rec{font-family:var(--mono);font-size:.66rem;text-transform:uppercase;letter-spacing:.08em;
+    color:var(--accent-deep);background:var(--accent-soft);border:1px solid var(--accent);
+    padding:2px 7px;border-radius:99px;font-weight:700;margin-left:var(--sp-2);vertical-align:1px}
 
-  /* ── acción: comando copiable / descarga ───────────────────── */
-  .act{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);
-    padding:var(--sp-4);display:grid;gap:var(--sp-3);margin-bottom:var(--sp-3)}
-  .act .lbl{margin-bottom:calc(-1 * var(--sp-1))}
-  .act code{font-family:var(--mono);font-size:var(--t-sm);line-height:1.5;
-    display:block;max-width:100%;overflow-x:auto;white-space:pre;padding-bottom:2px;color:var(--ink)}
+  .project-panel{display:grid;gap:var(--sp-3);margin-top:var(--sp-5)}
+  .project-panel[hidden]{display:none}
+  .tool-list{margin:0;padding-left:var(--sp-5);font-size:var(--t-sm);color:var(--muted)}
+  .tool-list li{margin:var(--sp-1) 0}
+  .tool-list code{font-family:var(--mono);font-size:.92em;color:var(--ink)}
+  .note{padding:var(--sp-3) var(--sp-4);border-radius:10px;background:var(--signal-soft);
+    border:1px solid color-mix(in srgb,var(--signal) 30%,var(--line));font-size:var(--t-sm);color:var(--muted)}
+
+  .cmd{background:var(--term-bg);border:1px solid color-mix(in srgb,var(--term-ink) 14%,transparent);
+    border-radius:var(--r);overflow:hidden;margin-bottom:var(--sp-3)}
+  .cmd-head{display:flex;align-items:center;gap:var(--sp-2);padding:var(--sp-2) var(--sp-3);border-bottom:1px solid rgba(255,255,255,.06)}
+  .cmd-head .dot{width:9px;height:9px;border-radius:50%;background:#5fd07f;flex:none}
+  .cmd-head .lbl{color:var(--term-dim);margin:0;font-size:.7rem}
+  .cmd-head .copy{margin-left:auto;font-family:var(--mono);font-size:var(--t-xs);font-weight:700;
+    color:var(--term-accent);padding:var(--sp-1) var(--sp-2);border-radius:6px;min-height:32px}
+  .cmd-head .copy:hover{background:rgba(255,255,255,.06)}
+  .cmd-body{display:flex;gap:var(--sp-2);padding:var(--sp-3);font-family:var(--mono);font-size:var(--t-sm);line-height:1.6;overflow-x:auto}
+  .cmd-body::before{content:"$";color:var(--term-accent);flex:none;font-weight:700}
+  .cmd-body code{color:var(--term-ink);white-space:pre;display:block}
+
   .go{display:inline-flex;align-items:center;justify-content:center;gap:var(--sp-2);
     padding:var(--sp-3) var(--sp-5);border-radius:10px;background:var(--accent);color:#fff;
     font-size:var(--t-base);font-weight:700;transition:background .2s,transform .08s;
-    width:100%;min-height:44px;min-width:44px}
+    width:100%;min-height:44px;min-width:44px;font-family:var(--mono);letter-spacing:-.01em}
   .go:hover{background:var(--accent-deep)}
   .go:active{transform:scale(.99)}
   .go.ghost{background:var(--panel);color:var(--ink);border:1px solid var(--line)}
   .go.ghost:hover{border-color:var(--accent);background:var(--accent-soft)}
-  .go.ok{background:var(--ok)}
+  .go.ok{background:var(--accent-deep)}
+  .dl{margin-top:var(--sp-3)}
 
-  .hint{font-size:var(--t-sm);color:var(--muted)}
-  .hint code{font-family:var(--mono);font-size:.9em;background:var(--accent-soft);
-    padding:1px 5px;border-radius:4px}
+  .hint{font-size:var(--t-sm);color:var(--muted);margin-top:var(--sp-3)}
+  .hint code{font-family:var(--mono);font-size:.9em;background:var(--accent-soft);padding:1px 5px;border-radius:4px}
 
-  /* ── verificación ──────────────────────────────────────────── */
   .check-it{display:grid;gap:var(--sp-2);padding:var(--sp-4);border-radius:var(--r);
-    background:var(--accent-soft);border:1px solid var(--line);font-size:var(--t-sm);
-    margin-top:var(--sp-2)}
-  .check-it b{color:var(--accent-deep);font-weight:700}
+    background:var(--accent-soft);border:1px solid color-mix(in srgb,var(--accent) 24%,var(--line));
+    font-size:var(--t-sm);margin-top:var(--sp-3)}
+  .check-it b{color:var(--accent-deep);font-weight:700;font-family:var(--mono)}
+  .check-it code{font-family:var(--mono);font-size:.9em;background:var(--raise);padding:1px 5px;border-radius:4px;border:1px solid var(--line)}
 
   .done-btn{margin-top:var(--sp-5)}
-  .step.done .done-btn{background:var(--ok)}
 
-  /* ── ayuda plegable ────────────────────────────────────────── */
   details{margin-top:var(--sp-4);border-top:1px solid var(--line);padding-top:var(--sp-4)}
-  summary{cursor:pointer;font-size:var(--t-sm);font-weight:660;color:var(--muted);
-    list-style:none}
+  summary{cursor:pointer;font-size:var(--t-sm);font-weight:660;color:var(--muted);list-style:none;font-family:var(--mono)}
   summary::-webkit-details-marker{display:none}
-  summary::before{content:"＋ ";font-family:var(--mono)}
-  details[open] summary::before{content:"− "}
+  summary::before{content:"› ";color:var(--accent);font-weight:800}
+  details[open] summary::before{content:"⌄ "}
   details p{font-size:var(--t-sm);color:var(--muted);margin-top:var(--sp-3)}
   details p + p{margin-top:var(--sp-2)}
+  details code{font-family:var(--mono);font-size:.9em;background:var(--accent-soft);padding:1px 5px;border-radius:4px}
 
-  /* ── final ─────────────────────────────────────────────────── */
-  .fin{text-align:center;padding:var(--sp-8) 0}
-  .fin h2{font-size:var(--t-xl);font-weight:760;margin-bottom:var(--sp-3)}
-  .fin p{color:var(--muted);max-width:44ch;margin:0 auto var(--sp-5)}
-  .prompts{display:grid;gap:var(--sp-2);text-align:left}
-  .handoff-grid{display:grid;gap:var(--sp-2)}
+  .fin{padding:var(--sp-8) 0}
+  .fin .eyebrow{color:var(--accent-deep)}
+  .fin h2{font-size:var(--t-xl);font-weight:720;margin:var(--sp-3) 0}
+  .fin > .col > p{color:var(--muted);max-width:46ch;margin-bottom:var(--sp-5)}
+  .handoff-grid{display:grid;gap:var(--sp-2);margin-top:var(--sp-3)}
   .handoff-grid .go[aria-current="true"]{box-shadow:0 0 0 2px var(--accent-soft),0 0 0 4px var(--accent)}
 
   footer{border-top:1px solid var(--line);padding:var(--sp-5) 0 var(--sp-8);
-    font-size:var(--t-sm);color:var(--muted);text-align:center}
+    font-size:var(--t-xs);color:var(--muted);text-align:center;font-family:var(--mono);letter-spacing:.04em}
 
-  .toast{position:fixed;left:50%;bottom:var(--sp-5);transform:translate(-50%,120%);
-    background:var(--ink);color:var(--paper);padding:var(--sp-3) var(--sp-5);
-    border-radius:99px;font-size:var(--t-sm);font-weight:640;z-index:60;
-    transition:transform .3s cubic-bezier(.4,0,.2,1);box-shadow:0 8px 24px rgba(0,0,0,.18)}
+  .toast{position:fixed;left:50%;bottom:var(--sp-5);transform:translate(-50%,180%);
+    background:var(--ink);color:var(--paper);padding:var(--sp-3) var(--sp-5);border-radius:99px;
+    font-size:var(--t-sm);font-weight:640;z-index:60;max-width:calc(100% - 32px);
+    transition:transform .32s cubic-bezier(.4,0,.2,1);box-shadow:0 8px 28px rgba(0,0,0,.24)}
   .toast.on{transform:translate(-50%,0)}
 
   [hidden]{display:none !important}
 
-  @media (prefers-reduced-motion:reduce){
-    html{scroll-behavior:auto}
-    *{transition:none !important;animation:none !important}
-  }
-  @media (min-width:620px){
-    .handoff-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
-  }
+  @media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto} *{transition:none !important;animation:none !important} .cursor,.cur{opacity:1} }
+  @media (min-width:620px){ .handoff-grid{grid-template-columns:repeat(3,minmax(0,1fr))} }
   @media (max-width:520px){
     .col{padding:0 var(--sp-4)}
     .bar .col{gap:var(--sp-2)}
     .toast{left:var(--sp-3);right:var(--sp-3);bottom:max(var(--sp-3),env(safe-area-inset-bottom));
-      transform:translateY(calc(100% + var(--sp-5)));border-radius:14px;text-align:center}
+      transform:translateY(calc(100% + var(--sp-6)));border-radius:14px;text-align:center;max-width:none}
     .toast.on{transform:translateY(0)}
   }
-  @media (max-width:400px){
-    #stepLbl{display:none}
-  }
+  @media (max-width:390px){ #stepLbl{display:none} }
 </style>
 </head>
 <body>
@@ -195,7 +222,7 @@
 
 <div class="bar">
   <div class="col">
-    <span class="lbl" id="stepLbl">Paso 1 de 4</span>
+    <span id="stepLbl">paso 1/5</span>
     <div class="track"><div class="fill" id="fill"></div></div>
     <span class="pct" id="pct">0%</span>
     <button class="icon-btn" id="themeBtn" aria-label="Cambiar entre tema claro y oscuro">◐</button>
@@ -204,9 +231,15 @@
 
 <header>
   <div class="col">
-    <p class="lbl">Guía interactiva</p>
-    <h1>Integra IA a tus proyectos</h1>
-    <p>Cuatro pasos. Los comandos ya están listos — solo cópialos y pégalos.</p>
+    <span class="eyebrow">Guía interactiva</span>
+    <h1>Integra IA<br>a tus proyectos<span class="cursor" aria-hidden="true"></span></h1>
+    <p class="sub">Cinco pasos. Los comandos ya están listos: los copias, los pegas, funciona.</p>
+
+    <div class="terminal" aria-hidden="true">
+      <div class="term-bar"><i></i><i></i><i></i><span>bash — integrar-ia</span></div>
+      <div class="term-body"><span class="p">~/mi-proyecto $</span> claude
+<span class="o">✓ Conectado. DevControl · devSteps · linkAnalizer listos.</span><span class="p">~/mi-proyecto $</span> revisa mis cambios y dime qué aprobar<span class="cur"></span></div>
+    </div>
 
     <div class="os">
       <span>Tu sistema: <b id="osName">detectando…</b></span>
@@ -226,178 +259,166 @@
   </div>
 </header>
 
-<!-- ── PASO 1 ────────────────────────────────────────────────── -->
+<main>
+
 <section class="step" id="s1" data-step="1">
   <div class="col">
     <div class="step-top"><div class="badge">1</div><h2>Instala Node.js</h2></div>
-    <p>Es la base que necesitan los asistentes. Se instala una sola vez.</p>
-
-    <div id="nodeWin" class="os-block">
-      <a class="go" href="https://nodejs.org/en/download" target="_blank" rel="noreferrer">Descargar Node.js para Windows ↗</a>
-      <p class="hint" style="margin-top:var(--sp-3)">Abre el archivo descargado y pulsa Siguiente hasta terminar. Si te ofrece <em>“Add to PATH”</em>, déjalo marcado.</p>
-    </div>
-    <div id="nodeMac" class="os-block" hidden>
-      <a class="go" href="https://nodejs.org/en/download" target="_blank" rel="noreferrer">Descargar Node.js para Mac ↗</a>
-      <p class="hint" style="margin-top:var(--sp-3)">Abre el archivo <code>.pkg</code> descargado y pulsa Continuar hasta terminar.</p>
-    </div>
-    <div id="nodeLinux" class="os-block" hidden>
-      <div class="act">
-        <span class="lbl">Pega esto en la terminal</span>
-        <code id="c-node-linux">curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash - && sudo apt install -y nodejs</code>
-        <button class="go" data-copy="#c-node-linux">Copiar comando</button>
+    <p class="intro">Es la base que necesitan los asistentes. Se instala una sola vez.</p>
+    <div class="step-body">
+      <div id="nodeWin" class="os-block">
+        <a class="go" href="https://nodejs.org/en/download" target="_blank" rel="noreferrer">Descargar Node.js para Windows ↗</a>
+        <p class="hint">Abre el archivo descargado y pulsa Siguiente hasta terminar. Si te ofrece <em>“Add to PATH”</em>, déjalo marcado.</p>
       </div>
-      <p class="hint">Te pedirá tu contraseña. Al escribirla no se ve nada en pantalla — es normal, escribe y pulsa Enter.</p>
-    </div>
-
-    <div class="check-it">
-      <b>Para comprobar que funcionó</b>
-      <span>Abre la terminal y pega <code id="c-nodev">node --version</code>. Si aparece un número como <code>v22.14.0</code>, quedó listo.</span>
-      <button class="go ghost" data-copy="#c-nodev" style="margin-top:var(--sp-1)">Copiar comprobación</button>
-    </div>
-
-    <details>
-      <summary>¿Cómo abro la terminal?</summary>
-      <p><b>Windows:</b> pulsa la tecla Windows, escribe <code>PowerShell</code> y ábrelo.</p>
-      <p><b>Mac:</b> pulsa Cmd + barra espaciadora, escribe <code>Terminal</code> y Enter.</p>
-      <p><b>Linux:</b> pulsa Ctrl + Alt + T.</p>
-      <p>Verás una ventana con texto y un cursor. Ahí pegas los comandos con Ctrl+V (Cmd+V en Mac) y pulsas Enter.</p>
-    </details>
-
-    <button class="go done-btn" data-done="1">Listo, siguiente paso ↓</button>
-  </div>
-</section>
-
-<!-- ── PASO 2 ────────────────────────────────────────────────── -->
-<section class="step" id="s2" data-step="2">
-  <div class="col">
-    <div class="step-top"><div class="badge">2</div><h2>Elige tu asistente</h2></div>
-    <p>Toca uno. Puedes añadir otros después.</p>
-
-    <div class="opts">
-      <button class="opt" data-ai="claude" aria-pressed="false">
-        <div class="g"><strong>Claude Code <span class="rec">Recomendado</span></strong>
-          <span>El más simple para empezar.</span></div>
-        <span class="pick">✓</span>
-      </button>
-      <button class="opt" data-ai="codex" aria-pressed="false">
-        <div class="g"><strong>Codex</strong><span>Si ya usas ChatGPT.</span></div>
-        <span class="pick">✓</span>
-      </button>
-      <button class="opt" data-ai="ollama" aria-pressed="false">
-        <div class="g"><strong>Ollama</strong><span>Gratis y sin internet. Todo queda en tu equipo.</span></div>
-        <span class="pick">✓</span>
-      </button>
-    </div>
-
-    <div id="aiInstall" hidden style="margin-top:var(--sp-5)">
-      <div class="act">
-        <span class="lbl" id="aiLbl">Pega esto en la terminal</span>
-        <code id="c-ai">—</code>
-        <button class="go" data-copy="#c-ai">Copiar comando</button>
+      <div id="nodeMac" class="os-block" hidden>
+        <a class="go" href="https://nodejs.org/en/download" target="_blank" rel="noreferrer">Descargar Node.js para Mac ↗</a>
+        <p class="hint">Abre el archivo <code>.pkg</code> descargado y pulsa Continuar hasta terminar.</p>
+      </div>
+      <div id="nodeLinux" class="os-block" hidden>
+        <div class="cmd">
+          <div class="cmd-head"><span class="dot"></span><span class="lbl">terminal</span><button class="copy" data-copy="#c-node-linux">copiar</button></div>
+          <div class="cmd-body"><code id="c-node-linux">curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash - &amp;&amp; sudo apt install -y nodejs</code></div>
+        </div>
+        <p class="hint">Te pedirá tu contraseña. Al escribirla no se ve nada en pantalla — es normal, escribe y pulsa Enter.</p>
       </div>
       <div class="check-it">
-        <b>Para comprobar que funcionó</b>
-        <span id="aiCheckTxt">—</span>
-        <button class="go ghost" data-copy="#c-aiv" style="margin-top:var(--sp-1)">Copiar comprobación</button>
-        <code id="c-aiv" hidden>—</code>
+        <b>▸ Comprobar</b>
+        <span>Pega <code>node --version</code> en la terminal. Si aparece un número como <code>v22.14.0</code>, quedó listo.</span>
       </div>
-      <p class="hint" style="margin-top:var(--sp-3)" id="aiNote"></p>
+      <details>
+        <summary>¿Cómo abro la terminal?</summary>
+        <p><b>Windows:</b> pulsa la tecla Windows, escribe <code>PowerShell</code> y ábrelo.</p>
+        <p><b>Mac:</b> pulsa Cmd + barra espaciadora, escribe <code>Terminal</code> y Enter.</p>
+        <p><b>Linux:</b> pulsa Ctrl + Alt + T.</p>
+        <p>Verás una ventana con texto y un cursor. Ahí pegas los comandos con Ctrl+V (Cmd+V en Mac) y Enter.</p>
+      </details>
+      <button class="go done-btn" data-done="1">Listo, siguiente ↓</button>
     </div>
-
-    <details>
-      <summary>Me dice “comando no encontrado”</summary>
-      <p>Cierra la terminal y vuelve a abrirla — los programas recién instalados aparecen en la nueva ventana.</p>
-      <p>Si sigue igual, copia el mensaje de error completo y pégalo en el chat de tu asistente preguntando qué hacer.</p>
-    </details>
-
-    <button class="go done-btn" data-done="2">Listo, siguiente paso ↓</button>
   </div>
 </section>
 
-<!-- ── PASO 3 ────────────────────────────────────────────────── -->
-<section class="step" id="s3" data-step="3">
+<section class="step" id="s2" data-step="2">
   <div class="col">
-    <div class="step-top"><div class="badge">3</div><h2>Descarga la Suite</h2></div>
-    <p>Cinco herramientas que se instalan juntas: control de cambios, orquestación, análisis de enlaces y más.</p>
-
-    <div class="act">
-      <span class="lbl">Opción rápida — un comando</span>
-      <code id="c-suite">curl -fsSL https://raw.githubusercontent.com/PRojas01/solucionespro-suite/master/install.sh | bash</code>
-      <button class="go" data-copy="#c-suite">Copiar comando</button>
-    </div>
-
-    <div class="act">
-      <span class="lbl">O descarga el instalador</span>
-      <p class="hint">Te guarda un archivo que puedes revisar antes de ejecutarlo.</p>
-      <button class="go ghost" id="dlInstaller">⤓ Descargar instalar-suite.sh</button>
-    </div>
-
-    <div class="check-it">
-      <b>Necesitas Git</b>
-      <span>El instalador lo usa para descargar. Compruébalo con <code id="c-gitv">git --version</code>. Si no lo tienes, <a href="https://git-scm.com/downloads" target="_blank" rel="noreferrer">descárgalo aquí ↗</a> (Siguiente hasta terminar).</span>
-      <button class="go ghost" data-copy="#c-gitv" style="margin-top:var(--sp-1)">Copiar comprobación</button>
-    </div>
-
-    <p class="hint" style="margin-top:var(--sp-4)"><b>No cierres la terminal</b> al terminar: ahí aparecen las rutas que usa el paso 4.</p>
-
-    <button class="go done-btn" data-done="3">Listo, siguiente paso ↓</button>
-  </div>
-</section>
-
-<!-- ── PASO 4 ────────────────────────────────────────────────── -->
-<section class="step" id="s4" data-step="4">
-  <div class="col">
-    <div class="step-top"><div class="badge">4</div><h2>Conecta la Suite</h2></div>
-    <p id="connIntro">Un comando por herramienta. Pégalos en la misma terminal.</p>
-
-    <div class="act">
-      <span class="lbl">Control de cambios</span>
-      <code id="c-m1">—</code>
-      <button class="go" data-copy="#c-m1">Copiar comando</button>
-    </div>
-    <div class="act">
-      <span class="lbl">Análisis de enlaces</span>
-      <code id="c-m2">—</code>
-      <button class="go ghost" data-copy="#c-m2">Copiar comando</button>
-    </div>
-    <div class="act">
-      <span class="lbl">Asesor comercial</span>
-      <code id="c-m3">—</code>
-      <button class="go ghost" data-copy="#c-m3">Copiar comando</button>
-    </div>
-
-    <div class="check-it">
-      <b>Para comprobar que funcionó</b>
-      <span>Abre tu asistente y escríbele: <em>“lista tus herramientas y dime si aparece sp-devcontrol”</em>.</span>
-    </div>
-
-    <button class="go done-btn" data-done="4">Terminé ✓</button>
-  </div>
-</section>
-
-<!-- ── FINAL ─────────────────────────────────────────────────── -->
-<section class="fin" id="fin" hidden>
-  <div class="col">
-    <p class="lbl">Todo listo</p>
-    <h2>Ya puedes trabajar con IA</h2>
-    <p>Escribe uno de estos mensajes en el chat de tu asistente para empezar.</p>
-    <div class="prompts">
-      <div class="act">
-        <span class="lbl">Para revisar cambios</span>
-        <code id="c-p1">Revisa mis cambios con DevControl y dime qué debo aprobar.</code>
-        <button class="go ghost" data-copy="#c-p1">Copiar</button>
-        <span class="lbl">Abrir mi asistente de IA</span>
-        <div class="handoff-grid">
-          <button class="go ghost" data-handoff="claude" data-prompt="#c-p1">Abrir Claude</button>
-          <button class="go ghost" data-handoff="chatgpt" data-prompt="#c-p1">Abrir ChatGPT</button>
-          <button class="go ghost" data-handoff="codex" data-prompt="#c-p1">Abrir Codex</button>
+    <div class="step-top"><div class="badge">2</div><h2>¿Qué vas a construir?</h2></div>
+    <p class="intro">Elige el tipo de proyecto y te digo qué herramientas encajan — y con qué prompt arrancar.</p>
+    <div class="step-body">
+      <div class="opts" role="group" aria-label="Tipo de proyecto">
+        <button class="opt" data-project="marketing" aria-pressed="false"><div class="g"><strong>Contenido y marketing</strong><span>SEO, redes y campañas.</span></div><span class="pick">›</span></button>
+        <button class="opt" data-project="software" aria-pressed="false"><div class="g"><strong>Desarrollo de software</strong><span>Ciclo de vida, cambios y aprobación.</span></div><span class="pick">›</span></button>
+        <button class="opt" data-project="sales" aria-pressed="false"><div class="g"><strong>Ventas y atención</strong><span>WhatsApp, CRM y respuestas aprobadas.</span></div><span class="pick">›</span></button>
+        <button class="opt" data-project="industrial" aria-pressed="false"><div class="g"><strong>Industrial / IoT</strong><span>PLC, protocolos y simulación.</span></div><span class="pick">›</span></button>
+        <button class="opt" data-project="ops" aria-pressed="false"><div class="g"><strong>Operaciones y finanzas</strong><span>ERP, compras, inventario y RRHH.</span></div><span class="pick">›</span></button>
+        <button class="opt" data-project="research" aria-pressed="false"><div class="g"><strong>Análisis e investigación</strong><span>Evidencia y cadena de custodia.</span></div><span class="pick">›</span></button>
+      </div>
+      <div class="project-panel" id="projectPanel" hidden>
+        <div class="cmd" style="background:var(--panel);border-color:var(--line)">
+          <div class="cmd-head" style="border-bottom-color:var(--line)"><span class="dot"></span><span class="lbl" style="color:var(--muted)">módulos de la suite</span></div>
+          <div style="padding:var(--sp-3)"><ul class="tool-list" id="projectModules"></ul></div>
+        </div>
+        <div class="cmd" style="background:var(--panel);border-color:var(--line)">
+          <div class="cmd-head" style="border-bottom-color:var(--line)"><span class="dot"></span><span class="lbl" style="color:var(--muted)">componentes forgepilot</span></div>
+          <div style="padding:var(--sp-3)"><ul class="tool-list" id="projectForge"></ul></div>
+        </div>
+        <p class="note" id="projectNote" hidden></p>
+        <div class="cmd">
+          <div class="cmd-head"><span class="dot"></span><span class="lbl">prompt de arranque</span><button class="copy" data-copy="#c-project-prompt">copiar</button></div>
+          <div class="cmd-body"><code id="c-project-prompt" style="white-space:pre-wrap">—</code></div>
         </div>
       </div>
-      <div class="act">
-        <span class="lbl">Para analizar un enlace</span>
-        <code id="c-p2">Analiza este enlace con linkAnalizer y guárdame la evidencia.</code>
-        <button class="go ghost" data-copy="#c-p2">Copiar</button>
+      <button class="go done-btn" data-done="2">Listo, siguiente ↓</button>
+    </div>
+  </div>
+</section>
+
+<section class="step" id="s3" data-step="3">
+  <div class="col">
+    <div class="step-top"><div class="badge">3</div><h2>Elige tu asistente</h2></div>
+    <p class="intro">Toca uno. Puedes añadir otros después.</p>
+    <div class="step-body">
+      <div class="opts" role="group" aria-label="Asistente">
+        <button class="opt" data-ai="claude" aria-pressed="false"><div class="g"><strong>Claude Code <span class="rec">recomendado</span></strong><span>El más simple para empezar.</span></div><span class="pick">›</span></button>
+        <button class="opt" data-ai="codex" aria-pressed="false"><div class="g"><strong>Codex</strong><span>Si ya usas ChatGPT.</span></div><span class="pick">›</span></button>
+        <button class="opt" data-ai="ollama" aria-pressed="false"><div class="g"><strong>Ollama</strong><span>Gratis y sin internet. Todo en tu equipo.</span></div><span class="pick">›</span></button>
       </div>
+      <div id="aiInstall" hidden style="margin-top:var(--sp-5)">
+        <div class="cmd">
+          <div class="cmd-head"><span class="dot"></span><span class="lbl" id="aiLbl">terminal</span><button class="copy" data-copy="#c-ai">copiar</button></div>
+          <div class="cmd-body"><code id="c-ai">—</code></div>
+        </div>
+        <div class="check-it"><b>▸ Comprobar</b><span id="aiCheckTxt">—</span><code id="c-aiv" hidden>—</code></div>
+        <p class="hint" id="aiNote"></p>
+      </div>
+      <details>
+        <summary>Me dice “comando no encontrado”</summary>
+        <p>Cierra la terminal y vuelve a abrirla — los programas recién instalados aparecen en la nueva ventana.</p>
+        <p>Si sigue igual, copia el error completo y pégalo en el chat de tu asistente preguntando qué hacer.</p>
+      </details>
+      <button class="go done-btn" data-done="3">Listo, siguiente ↓</button>
+    </div>
+  </div>
+</section>
+
+<section class="step" id="s4" data-step="4">
+  <div class="col">
+    <div class="step-top"><div class="badge">4</div><h2>Descarga la Suite</h2></div>
+    <p class="intro">Cinco herramientas juntas: control de cambios, orquestación, análisis de enlaces y más.</p>
+    <div class="step-body">
+      <div class="cmd">
+        <div class="cmd-head"><span class="dot"></span><span class="lbl">un comando</span><button class="copy" data-copy="#c-suite">copiar</button></div>
+        <div class="cmd-body"><code id="c-suite">curl -fsSL https://raw.githubusercontent.com/PRojas01/solucionespro-suite/master/install.sh | bash</code></div>
+      </div>
+      <button class="go ghost dl" id="dlInstaller">⤓ O descarga el instalador para revisarlo antes</button>
+      <div class="check-it">
+        <b>▸ Necesitas Git</b>
+        <span>El instalador lo usa para descargar. Compruébalo con <code>git --version</code>. Si no lo tienes, <a href="https://git-scm.com/downloads" target="_blank" rel="noreferrer">descárgalo aquí ↗</a>.</span>
+      </div>
+      <p class="hint"><b>No cierres la terminal</b> al terminar: ahí aparecen las rutas del paso 5.</p>
+      <button class="go done-btn" data-done="4">Listo, siguiente ↓</button>
+    </div>
+  </div>
+</section>
+
+<section class="step" id="s5" data-step="5">
+  <div class="col">
+    <div class="step-top"><div class="badge">5</div><h2>Conecta la Suite</h2></div>
+    <p class="intro" id="connIntro">Un comando por herramienta. Pégalos en la misma terminal.</p>
+    <div class="step-body">
+      <div class="cmd">
+        <div class="cmd-head"><span class="dot"></span><span class="lbl">control de cambios</span><button class="copy" data-copy="#c-m1">copiar</button></div>
+        <div class="cmd-body"><code id="c-m1">—</code></div>
+      </div>
+      <div class="cmd">
+        <div class="cmd-head"><span class="dot"></span><span class="lbl">análisis de enlaces</span><button class="copy" data-copy="#c-m2">copiar</button></div>
+        <div class="cmd-body"><code id="c-m2">—</code></div>
+      </div>
+      <div class="cmd">
+        <div class="cmd-head"><span class="dot"></span><span class="lbl">asesor comercial</span><button class="copy" data-copy="#c-m3">copiar</button></div>
+        <div class="cmd-body"><code id="c-m3">—</code></div>
+      </div>
+      <div class="check-it">
+        <b>▸ Comprobar</b>
+        <span>Abre tu asistente y escríbele: <em>“lista tus herramientas y dime si aparece sp-devcontrol”</em>.</span>
+      </div>
+      <button class="go done-btn" data-done="5">Terminé ✓</button>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<section class="fin" id="fin" hidden>
+  <div class="col">
+    <span class="eyebrow">Todo listo</span>
+    <h2>Ya puedes trabajar con IA</h2>
+    <p>Abre tu asistente con el prompt listo. Lo copiamos por ti — solo pega (Ctrl+V) en el chat.</p>
+    <div class="cmd">
+      <div class="cmd-head"><span class="dot"></span><span class="lbl">tu prompt de arranque</span><button class="copy" data-copy="#c-handoff">copiar</button></div>
+      <div class="cmd-body"><code id="c-handoff" style="white-space:pre-wrap">Revisa mis cambios con DevControl y dime qué debo aprobar.</code></div>
+    </div>
+    <div class="handoff-grid">
+      <button class="go" data-handoff="claude" data-prompt="#c-handoff">Abrir Claude</button>
+      <button class="go ghost" data-handoff="chatgpt" data-prompt="#c-handoff">Abrir ChatGPT</button>
+      <button class="go ghost" data-handoff="codex" data-prompt="#c-handoff">Abrir Codex</button>
     </div>
   </div>
 </section>
@@ -411,19 +432,15 @@
   "use strict";
   var $ = function(s){ return document.querySelector(s); };
   var $$ = function(s){ return Array.prototype.slice.call(document.querySelectorAll(s)); };
-
-  /* almacenamiento tolerante a modo privado */
   var store = {
     get:function(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } },
     set:function(k,v){ try{ localStorage.setItem(k,v); }catch(e){} },
     del:function(k){ try{ localStorage.removeItem(k); }catch(e){} }
   };
-
-  var TOTAL = 4;
+  var TOTAL = 5;
   var done = {};
   try{ done = JSON.parse(store.get("guia.done") || "{}") || {}; }catch(e){ done = {}; }
 
-  /* ── tema ─────────────────────────────────────────────── */
   var saved = store.get("guia.theme");
   if(saved) document.documentElement.setAttribute("data-theme", saved);
   $("#themeBtn").addEventListener("click", function(){
@@ -434,184 +451,85 @@
     store.set("guia.theme", next);
   });
 
-  /* ── toast + copiar (acción real) ─────────────────────── */
   var toast = $("#toast"), tt;
-  function ping(msg){
-    toast.textContent = msg || "Copiado";
-    toast.classList.add("on");
-    clearTimeout(tt);
-    tt = setTimeout(function(){ toast.classList.remove("on"); }, 1800);
-  }
+  function ping(msg){ toast.textContent = msg || "Copiado"; toast.classList.add("on"); clearTimeout(tt); tt = setTimeout(function(){ toast.classList.remove("on"); }, 1900); }
+  function fallback(text){ var ta = document.createElement("textarea"); ta.value = text; ta.style.position="fixed"; ta.style.opacity="0"; document.body.appendChild(ta); ta.select(); try{ document.execCommand("copy"); }catch(e){} document.body.removeChild(ta); }
   function copy(text, btn, msg, after){
-    function ok(){
-      if(btn){
-        var prev = btn.textContent;
-        btn.textContent = "✓ Copiado";
-        btn.classList.add("ok");
-        setTimeout(function(){ btn.textContent = prev; btn.classList.remove("ok"); }, 1600);
-      }
-      ping(msg || "Copiado — ahora pégalo en la terminal");
-      if(after) after();
-    }
-    if(navigator.clipboard && navigator.clipboard.writeText){
-      navigator.clipboard.writeText(text).then(ok, function(){ fallback(text); ok(); });
-    } else { fallback(text); ok(); }
+    function ok(){ if(btn){ var prev = btn.textContent; btn.textContent = "✓ copiado"; setTimeout(function(){ btn.textContent = prev; }, 1600); } ping(msg || "Copiado — pégalo en la terminal"); if(after) after(); }
+    if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(ok, function(){ fallback(text); ok(); }); } else { fallback(text); ok(); }
   }
-  function fallback(text){
-    var ta = document.createElement("textarea");
-    ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
-    document.body.appendChild(ta); ta.select();
-    try{ document.execCommand("copy"); }catch(e){}
-    document.body.removeChild(ta);
-  }
-  document.addEventListener("click", function(e){
-    var b = e.target.closest("[data-copy]");
-    if(!b) return;
-    var el = document.querySelector(b.getAttribute("data-copy"));
-    if(el) copy(el.textContent.trim(), b);
-  });
+  document.addEventListener("click", function(e){ var b = e.target.closest("[data-copy]"); if(!b) return; var el = document.querySelector(b.getAttribute("data-copy")); if(el) copy(el.textContent.trim(), b); });
 
-  /* ── detección de sistema operativo ───────────────────── */
   var OS_NAME = { win:"Windows", mac:"Mac", linux:"Linux" };
   function detect(){
-    var f = store.get("guia.os");
-    if(f) return f;
-    var p = ((navigator.userAgentData && navigator.userAgentData.platform) ||
-             navigator.platform || navigator.userAgent || "").toLowerCase();
+    var f = store.get("guia.os"); if(f) return f;
+    var p = ((navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || navigator.userAgent || "").toLowerCase();
     if(p.indexOf("win") > -1) return "win";
     if(p.indexOf("mac") > -1 || p.indexOf("iphone") > -1 || p.indexOf("ipad") > -1) return "mac";
     return "linux";
   }
   var os = detect();
+  function applyOS(){ $("#osName").textContent = OS_NAME[os]; $("#nodeWin").hidden = os!=="win"; $("#nodeMac").hidden = os!=="mac"; $("#nodeLinux").hidden = os!=="linux"; if(picked) renderAI(); renderConnect(); }
+  $("#osChange").addEventListener("click", function(){ var p = $("#osPick"); p.hidden = !p.hidden; });
+  $$("#osPick button").forEach(function(b){ b.addEventListener("click", function(){ os = b.getAttribute("data-os"); store.set("guia.os", os); $("#osPick").hidden = true; applyOS(); ping("Guía ajustada para " + OS_NAME[os]); }); });
 
-  function applyOS(){
-    $("#osName").textContent = OS_NAME[os];
-    $("#nodeWin").hidden   = os !== "win";
-    $("#nodeMac").hidden   = os !== "mac";
-    $("#nodeLinux").hidden = os !== "linux";
-    if(picked) renderAI();
-    renderConnect();
+  var PROJECTS = {
+    marketing:{ modules:["<b>linkAnalizer</b> — analiza a la competencia con evidencia","<b>DevControl</b> — aprueba antes de publicar"], forge:["<code>forgepilot install agents marketing-automation</code>","<code>forgepilot install skills business-intelligence</code>"], note:"La suite no trae un motor SEO dedicado: el trabajo de contenido lo hace tu asistente; estas herramientas dan calendario, análisis de competencia y aprobación.", prompt:"Ayúdame a planificar contenido SEO para mi proyecto: dame 10 títulos optimizados, la estructura de un artículo pilar y una lista de palabras clave. Luego analiza con linkAnalizer 2 enlaces de la competencia que yo te pase y guarda la evidencia. Antes de publicar, pásalo por DevControl para que yo apruebe." },
+    software:{ modules:["<b>devSteps</b> — ciclo de vida por pasos","<b>DevControl</b> — gobernanza de cambios"], forge:["<code>forgepilot install skills project-management</code>"], note:"", prompt:"Guía el siguiente paso de mi proyecto con devSteps. Cuando propongas cambios de código, revísalos con DevControl y dime qué debo aprobar antes de aplicarlos." },
+    sales:{ modules:["<b>Asesor1Pro</b> — asesor de WhatsApp con aprobación humana"], forge:["<code>forgepilot install agents crm-management</code>","<code>forgepilot install agents customer-service</code>"], note:"", prompt:"Clasifica este mensaje de cliente con Asesor1Pro y sugiéreme una respuesta comercial. No la marques como enviada sin que yo la apruebe primero." },
+    industrial:{ modules:["<b>DevControl</b> — aprobar antes de cualquier escritura al PLC"], forge:["<code>forgepilot install agents industrial-automation</code>","<code>forgepilot install skills plc-programming</code>","MCP: <code>modbus</code> · <code>opcua</code> · <code>mqtt</code>"], note:"Varios agentes de ForgePilot funcionan hoy con datos de ejemplo; sirven para probar el flujo y se conectan a tus fuentes reales al configurarlos.", prompt:"Muéstrame los componentes industriales disponibles de ForgePilot. Conéctate por Modbus en modo simulación y léeme el estado de los registros. No hagas ninguna escritura al PLC sin mi aprobación explícita." },
+    ops:{ modules:["<b>DevControl</b> — control de las acciones sensibles"], forge:["<code>forgepilot install agents finance-analytics</code>","<code>forgepilot install agents procurement-agent</code>","<code>forgepilot install agents inventory-optimization</code>","<code>forgepilot install agents hr-workforce</code>"], note:"Varios agentes de ForgePilot funcionan hoy con datos de ejemplo; sirven para probar el flujo y se conectan a tus fuentes reales al configurarlos.", prompt:"Analiza mis finanzas con finance-analytics y dame recomendaciones. Revisa inventario con inventory-optimization y sugiere compras con procurement-agent." },
+    research:{ modules:["<b>linkAnalizer</b> — captura con cadena de custodia y hash"], forge:[], note:"", prompt:"Analiza este enlace con linkAnalizer y guárdame la evidencia con cadena de custodia y hash. Luego resúmeme los hallazgos clave." }
+  };
+  var project = store.get("guia.project") || "";
+  function fillList(el, items){ el.innerHTML = ""; items.forEach(function(t){ var li = document.createElement("li"); li.innerHTML = t; el.appendChild(li); }); }
+  function renderProject(){
+    var d = PROJECTS[project]; if(!d){ $("#projectPanel").hidden = true; return; }
+    fillList($("#projectModules"), d.modules);
+    var forgeWrap = $("#projectForge").closest(".cmd");
+    if(d.forge.length){ fillList($("#projectForge"), d.forge); forgeWrap.hidden = false; } else { forgeWrap.hidden = true; }
+    var note = $("#projectNote"); if(d.note){ note.textContent = d.note; note.hidden = false; } else { note.hidden = true; }
+    $("#c-project-prompt").textContent = d.prompt;
+    $("#c-handoff").textContent = d.prompt;
+    $("#projectPanel").hidden = false;
   }
-  $("#osChange").addEventListener("click", function(){
-    var p = $("#osPick");
-    p.hidden = !p.hidden;
-  });
-  $$("#osPick button").forEach(function(b){
-    b.addEventListener("click", function(){
-      os = b.getAttribute("data-os");
-      store.set("guia.os", os);
-      $("#osPick").hidden = true;
-      applyOS();
-      ping("Guía ajustada para " + OS_NAME[os]);
-    });
+  $$("[data-project]").forEach(function(b){
+    if(b.getAttribute("data-project") === project) b.setAttribute("aria-pressed","true");
+    b.addEventListener("click", function(){ project = b.getAttribute("data-project"); store.set("guia.project", project); $$("[data-project]").forEach(function(o){ o.setAttribute("aria-pressed", o === b ? "true" : "false"); }); renderProject(); });
   });
 
-  /* ── paso 2: elegir asistente ─────────────────────────── */
   var AI = {
-    claude:{
-      cmd:"npm install -g @anthropic-ai/claude-code",
-      ver:"claude --version",
-      check:"Pega esto en la terminal. Si aparece un número de versión, quedó listo.",
-      note:"Después escribe <code>claude</code> para abrirlo. Te pedirá iniciar sesión con tu cuenta de Claude."
-    },
-    codex:{
-      cmd:"npm install -g @openai/codex",
-      ver:"codex --version",
-      check:"Pega esto en la terminal. Si aparece un número de versión, quedó listo.",
-      note:"Después escribe <code>codex</code> para abrirlo. Elige iniciar sesión con ChatGPT."
-    },
-    ollama:{
-      cmdWin:"", cmdMac:"",
-      cmd:"curl -fsSL https://ollama.com/install.sh | sh",
-      ver:"ollama -v",
-      check:"Pega esto en la terminal. Si aparece un número de versión, quedó listo.",
-      note:"Después escribe <code>ollama run llama3.2</code>. La primera vez descarga varios GB — puede tardar."
-    }
+    claude:{ cmd:"npm install -g @anthropic-ai/claude-code", ver:"claude --version", check:"Pega el comando; si aparece un número de versión, quedó listo.", note:"Después escribe <code>claude</code> para abrirlo. Te pedirá iniciar sesión con tu cuenta de Claude." },
+    codex:{ cmd:"npm install -g @openai/codex", ver:"codex --version", check:"Pega el comando; si aparece un número de versión, quedó listo.", note:"Después escribe <code>codex</code> para abrirlo. Elige iniciar sesión con ChatGPT." },
+    ollama:{ cmd:"curl -fsSL https://ollama.com/install.sh | sh", ver:"ollama -v", check:"Pega el comando; si aparece un número de versión, quedó listo.", note:"Después escribe <code>ollama run llama3.2</code>. La primera vez descarga varios GB — puede tardar." }
   };
   var picked = store.get("guia.ai") || "";
-
-  function renderHandoff(){
-    $$("[data-handoff]").forEach(function(b){
-      var target = b.getAttribute("data-handoff");
-      var selected = (picked === "claude" && target === "claude") ||
-                     (picked === "codex" && target === "codex") ||
-                     (picked === "chatgpt" && target === "chatgpt");
-      b.classList.toggle("ghost", !selected);
-      if(selected) b.setAttribute("aria-current", "true");
-      else b.removeAttribute("aria-current");
-    });
-  }
-
-  function handoffUrl(target, prompt){
-    if(target === "claude") return "https://claude.ai/new?q=" + encodeURIComponent(prompt);
-    if(target === "chatgpt") return "https://chatgpt.com/?q=" + encodeURIComponent(prompt);
-    return "https://chatgpt.com/codex";
-  }
-
-  function openHandoff(btn){
-    var promptEl = document.querySelector(btn.getAttribute("data-prompt"));
-    var prompt = promptEl ? promptEl.textContent.trim() : "";
-    var url = handoffUrl(btn.getAttribute("data-handoff"), prompt);
-    copy(prompt, btn, "Prompt copiado — pégalo en el chat que acabo de abrir (Ctrl+V)", function(){
-      var win = window.open(url, "_blank", "noopener");
-      if(!win) ping("Prompt copiado — abre tu asistente y pégalo en el chat (Ctrl+V)");
-    });
-  }
-
-  $$("[data-handoff]").forEach(function(b){
-    b.addEventListener("click", function(){ openHandoff(b); });
-  });
-
+  function renderHandoff(){ $$("[data-handoff]").forEach(function(b){ var target = b.getAttribute("data-handoff"); var selected = (picked && target === picked); b.classList.toggle("ghost", !selected); if(selected) b.setAttribute("aria-current","true"); else b.removeAttribute("aria-current"); }); }
+  function handoffUrl(target, prompt){ if(target === "claude") return "https://claude.ai/new?q=" + encodeURIComponent(prompt); if(target === "chatgpt") return "https://chatgpt.com/?q=" + encodeURIComponent(prompt); return "https://chatgpt.com/codex"; }
+  function openHandoff(btn){ var el = document.querySelector(btn.getAttribute("data-prompt")); var prompt = el ? el.textContent.trim() : ""; var url = handoffUrl(btn.getAttribute("data-handoff"), prompt); copy(prompt, btn, "Prompt copiado — pégalo en el chat que abrí (Ctrl+V)", function(){ var win = window.open(url, "_blank", "noopener"); if(!win) ping("Prompt copiado — abre tu asistente y pégalo (Ctrl+V)"); }); }
+  $$("[data-handoff]").forEach(function(b){ b.addEventListener("click", function(){ openHandoff(b); }); });
   function renderAI(){
-    var d = AI[picked];
-    if(!d) return;
+    var d = AI[picked]; if(!d) return;
     var cmd = d.cmd;
-    if(picked === "ollama" && os !== "linux"){
-      cmd = "Descárgalo desde ollama.com/download e instálalo como cualquier programa.";
-      $("#aiLbl").textContent = "Cómo instalarlo";
-    } else {
-      $("#aiLbl").textContent = "Pega esto en la terminal";
-    }
-    $("#c-ai").textContent = cmd;
-    $("#c-aiv").textContent = d.ver;
-    $("#aiCheckTxt").textContent = d.check + " (" + d.ver + ")";
-    $("#aiNote").innerHTML = d.note;
-    $("#aiInstall").hidden = false;
+    if(picked === "ollama" && os !== "linux"){ cmd = "Descárgalo desde ollama.com/download e instálalo como cualquier programa."; $("#aiLbl").textContent = "cómo instalarlo"; } else { $("#aiLbl").textContent = "terminal"; }
+    $("#c-ai").textContent = cmd; $("#c-aiv").textContent = d.ver; $("#aiCheckTxt").textContent = d.check + " (" + d.ver + ")"; $("#aiNote").innerHTML = d.note; $("#aiInstall").hidden = false;
   }
   $$("[data-ai]").forEach(function(b){
     if(b.getAttribute("data-ai") === picked) b.setAttribute("aria-pressed","true");
-    b.addEventListener("click", function(){
-      picked = b.getAttribute("data-ai");
-      store.set("guia.ai", picked);
-      $$("[data-ai]").forEach(function(o){
-        o.setAttribute("aria-pressed", o === b ? "true" : "false");
-      });
-      renderAI();
-      renderConnect();
-      renderHandoff();
-    });
+    b.addEventListener("click", function(){ picked = b.getAttribute("data-ai"); store.set("guia.ai", picked); $$("[data-ai]").forEach(function(o){ o.setAttribute("aria-pressed", o === b ? "true" : "false"); }); renderAI(); renderConnect(); renderHandoff(); });
   });
-  if(picked) renderAI();
-  renderHandoff();
 
-  /* ── paso 4: comandos de conexión según asistente ─────── */
   function renderConnect(){
     var cli = picked === "codex" ? "codex" : "claude";
     $("#c-m1").textContent = cli + " mcp add sp-devcontrol -- node ./suite-ia/sp-devcontrol/dist/mcp.js";
     $("#c-m2").textContent = cli + " mcp add linkanalizer -- node ./suite-ia/SP-Linkanalizer/scripts/mcp_server.mjs";
     $("#c-m3").textContent = cli + " mcp add asesor1pro -- node ./suite-ia/Asesor1Pro/scripts/mcp_server.mjs";
-    $("#connIntro").textContent = picked === "ollama"
-      ? "Con Ollama usa las herramientas por terminal. Si además instalas Claude Code o Codex, estos comandos las conectan."
-      : "Un comando por herramienta. Pégalos en la misma terminal.";
+    $("#connIntro").textContent = picked === "ollama" ? "Con Ollama usa las herramientas por terminal. Si además instalas Claude Code o Codex, estos comandos las conectan." : "Un comando por herramienta. Pégalos en la misma terminal.";
   }
-  renderConnect();
 
-  /* ── acción real: generar y descargar el instalador ───── */
   var INSTALLER = [
     "#!/usr/bin/env bash",
     "# Instalador de la Suite de Gobernanza IA — SolucionesPro",
-    "# Descarga los 5 modulos, instala dependencias y muestra como conectarlos.",
-    "# Uso:  bash instalar-suite.sh",
     "set -uo pipefail",
     "DEST=\"${1:-$(pwd)/suite-ia}\"",
     "command -v git  >/dev/null 2>&1 || { echo 'Falta git: https://git-scm.com/downloads'; exit 1; }",
@@ -633,101 +551,48 @@
     "  fi",
     "  echo '  listo'",
     "done",
-    "echo",
-    "echo \"Modulos en: $DEST\"",
+    "echo; echo \"Modulos en: $DEST\"",
     "echo 'Conectalos con (cambia claude por codex si usas Codex):'",
     "echo \"  claude mcp add sp-devcontrol -- node $DEST/sp-devcontrol/dist/mcp.js\"",
     "echo \"  claude mcp add linkanalizer  -- node $DEST/SP-Linkanalizer/scripts/mcp_server.mjs\"",
     "echo \"  claude mcp add asesor1pro    -- node $DEST/Asesor1Pro/scripts/mcp_server.mjs\""
   ].join("\n") + "\n";
-
-  function isIOS(){
-    return /iPad|iPhone|iPod/.test(navigator.userAgent) ||
-      (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
-  }
-
+  function isIOS(){ return /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1); }
   $("#dlInstaller").addEventListener("click", function(){
     var blob = new Blob([INSTALLER], {type:"text/x-shellscript"});
     var url = URL.createObjectURL(blob);
-    var a = document.createElement("a");
-    a.href = url; a.download = "instalar-suite.sh";
+    var a = document.createElement("a"); a.href = url; a.download = "instalar-suite.sh";
     document.body.appendChild(a); a.click(); document.body.removeChild(a);
     setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
-    ping(isIOS()
-      ? "Descargado — si no se descarga, se abrió en una pestaña: guárdala con el menú compartir"
-      : "Descargado — ejecútalo con: bash instalar-suite.sh");
+    ping(isIOS() ? "Descargado — si no baja, se abrió en una pestaña: guárdala con Compartir" : "Descargado — ejecútalo con: bash instalar-suite.sh");
   });
 
-  /* ── progreso ─────────────────────────────────────────── */
-  function countDone(){
-    var n = 0;
-    for(var i=1;i<=TOTAL;i++){ if(done[i]) n++; }
-    return n;
-  }
+  function countDone(){ var n = 0; for(var i=1;i<=TOTAL;i++){ if(done[i]) n++; } return n; }
   function paint(){
-    var n = countDone();
-    var pctv = Math.round(n / TOTAL * 100);
-    $("#fill").style.width = pctv + "%";
-    $("#pct").textContent = pctv + "%";
-    for(var i=1;i<=TOTAL;i++){
-      var sec = $("#s"+i);
-      if(!sec) continue;
-      sec.classList.toggle("done", !!done[i]);
-      var b = sec.querySelector(".badge");
-      if(b) b.textContent = done[i] ? "✓" : String(i);
-      var db = sec.querySelector("[data-done]");
-      if(db && done[i]) db.textContent = "Completado ✓";
-    }
+    var n = countDone(); var pctv = Math.round(n / TOTAL * 100);
+    $("#fill").style.width = pctv + "%"; $("#pct").textContent = pctv + "%";
+    for(var i=1;i<=TOTAL;i++){ var sec = $("#s"+i); if(!sec) continue; sec.classList.toggle("done", !!done[i]); var b = sec.querySelector(".badge"); if(b) b.textContent = done[i] ? "✓" : String(i); var db = sec.querySelector("[data-done]"); if(db && done[i]) db.textContent = "Completado ✓"; }
     $("#fin").hidden = n < TOTAL;
-    if(n >= TOTAL) $("#stepLbl").textContent = "Completado";
+    if(n >= TOTAL) $("#stepLbl").textContent = "completado";
   }
-  $$("[data-done]").forEach(function(b){
-    b.addEventListener("click", function(){
-      var n = b.getAttribute("data-done");
-      done[n] = true;
-      store.set("guia.done", JSON.stringify(done));
-      paint();
-      var next = $("#s" + (parseInt(n,10) + 1)) || $("#fin");
-      if(next && !next.hidden) next.scrollIntoView({behavior:"smooth", block:"start"});
-      ping("Paso " + n + " completado");
-    });
-  });
+  $$("[data-done]").forEach(function(b){ b.addEventListener("click", function(){ var n = b.getAttribute("data-done"); done[n] = true; store.set("guia.done", JSON.stringify(done)); paint(); var next = $("#s" + (parseInt(n,10) + 1)) || $("#fin"); if(next && !next.hidden) next.scrollIntoView({behavior:"smooth", block:"start"}); ping("Paso " + n + " completado"); }); });
 
-  /* ── scroll-spy: qué paso estoy viendo ────────────────── */
   if("IntersectionObserver" in window){
-    var io = new IntersectionObserver(function(entries){
-      entries.forEach(function(en){
-        if(en.isIntersecting && countDone() < TOTAL){
-          var s = en.target.getAttribute("data-step");
-          $("#stepLbl").textContent = "Paso " + s + " de " + TOTAL;
-        }
-      });
-    }, {rootMargin:"-45% 0px -45% 0px"});
+    var io = new IntersectionObserver(function(entries){ entries.forEach(function(en){ if(en.isIntersecting){ $$(".step").forEach(function(s){ s.classList.remove("active"); }); en.target.classList.add("active"); if(countDone() < TOTAL) $("#stepLbl").textContent = "paso " + en.target.getAttribute("data-step") + "/" + TOTAL; } }); }, {rootMargin:"-45% 0px -45% 0px"});
     $$(".step").forEach(function(s){ io.observe(s); });
   }
 
-  /* ── continuar donde quedaste ─────────────────────────── */
   var n0 = countDone();
   if(n0 > 0 && n0 < TOTAL){
-    var nextStep = 1;
-    for(var i=1;i<=TOTAL;i++){ if(!done[i]){ nextStep = i; break; } }
-    $("#resumeStep").textContent = "paso " + nextStep;
-    $("#resume").classList.add("on");
-    $("#resumeGo").addEventListener("click", function(){
-      var t = $("#s"+nextStep);
-      if(t) t.scrollIntoView({behavior:"smooth", block:"start"});
-    });
-    $("#resumeReset").addEventListener("click", function(){
-      done = {}; store.del("guia.done");
-      $("#resume").classList.remove("on");
-      paint();
-      window.scrollTo({top:0, behavior:"smooth"});
-      ping("Progreso reiniciado");
-    });
+    var nextStep = 1; for(var i=1;i<=TOTAL;i++){ if(!done[i]){ nextStep = i; break; } }
+    $("#resumeStep").textContent = "paso " + nextStep; $("#resume").classList.add("on");
+    $("#resumeGo").addEventListener("click", function(){ var t = $("#s"+nextStep); if(t) t.scrollIntoView({behavior:"smooth", block:"start"}); });
+    $("#resumeReset").addEventListener("click", function(){ done = {}; store.del("guia.done"); $("#resume").classList.remove("on"); paint(); window.scrollTo({top:0, behavior:"smooth"}); ping("Progreso reiniciado"); });
   }
 
-  applyOS();
-  paint();
+  if(project) renderProject();
+  if(picked) renderAI();
+  renderConnect(); renderHandoff(); applyOS(); paint();
 })();
 </script>
 </body>
