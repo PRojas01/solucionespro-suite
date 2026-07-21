@@ -141,6 +141,13 @@
   .tool-list{margin:0;padding-left:var(--sp-5);font-size:var(--t-sm);color:var(--muted)}
   .tool-list li{margin:var(--sp-1) 0}
   .tool-list code{font-family:var(--mono);font-size:.92em;color:var(--ink)}
+  .catalog{display:grid;gap:var(--sp-2);margin:var(--sp-2) 0 var(--sp-4)}
+  .catalog .item{padding:var(--sp-3) var(--sp-4);background:var(--panel);border:1px solid var(--line);border-radius:10px}
+  .catalog .item h4{font-family:var(--mono);font-size:var(--t-sm);font-weight:700;margin:0;letter-spacing:-.01em}
+  .catalog .item p{font-size:var(--t-sm);color:var(--muted);margin-top:3px}
+  .catalog .item .ben{display:block;color:var(--accent-deep);font-weight:660;margin-top:var(--sp-1)}
+  .catalog .item .ben::before{content:"\2192 \00a0"}
+
   .note{padding:var(--sp-3) var(--sp-4);border-radius:10px;background:var(--signal-soft);
     border:1px solid color-mix(in srgb,var(--signal) 30%,var(--line));font-size:var(--t-sm);color:var(--muted)}
 
@@ -368,6 +375,15 @@
     <div class="step-top"><div class="badge">4</div><h2>Descarga la Suite</h2></div>
     <p class="intro">Cinco herramientas juntas: control de cambios, orquestación, análisis de enlaces y más.</p>
     <div class="step-body">
+      <p class="lbl" style="margin-bottom:var(--sp-2)">Qué hace cada una, en simple</p>
+      <div class="catalog">
+        <div class="item"><h4>DevControl</h4><p>Revisa y aprueba lo que la IA cambia antes de que se aplique.</p><span class="ben">Nada importante se ejecuta sin tu visto bueno, y queda registro de todo.</span></div>
+        <div class="item"><h4>devSteps</h4><p>Hace que la IA siga un proceso ordenado, paso a paso.</p><span class="ben">No se salta etapas ni improvisa: tu proyecto avanza predecible.</span></div>
+        <div class="item"><h4>linkAnalizer</h4><p>Analiza un enlace y guarda la evidencia con hash y fecha.</p><span class="ben">Prueba confiable y auditable de lo que había en ese enlace.</span></div>
+        <div class="item"><h4>ForgePilot</h4><p>Catálogo de componentes de IA ya hechos: agentes, skills y conectores (industriales y de negocio).</p><span class="ben">Instalas capacidades listas en vez de construirlas desde cero.</span></div>
+        <div class="item"><h4>Asesor1Pro</h4><p>Clasifica y responde consultas de WhatsApp; tú apruebas antes de enviar.</p><span class="ben">Respondes más rápido a tus clientes sin perder el control.</span></div>
+      </div>
+
       <div class="cmd">
         <div class="cmd-head"><span class="dot"></span><span class="lbl">un comando</span><button class="run" data-run="#c-suite">▸ ejecutar</button><button class="copy" data-copy="#c-suite">copiar</button></div>
         <div class="cmd-body"><code id="c-suite">curl -fsSL https://raw.githubusercontent.com/PRojas01/solucionespro-suite/master/install.sh | bash</code></div>
